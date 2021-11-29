@@ -1,157 +1,260 @@
-#include <stdio.h>
-#include <stdlib.h>
-//ff
-typedef struct {
-    int id;
-    char name[20];
-    int age;
-    char gender;
-    char address[7];
-} Companion;
+   #include <stdio.h>
+   #include <stdlib.h>
+   #include <string.h>
+   #include <stdbool.h>
+   
+   typedef struct {
+       int id;
+       char name[20];
+       int age;
+       char gender;
+       char address[7];
+   } Companion;
+   
+   typedef struct {
+       int yy;
+       int mm;
+       int dd;
+   } Date;
+   
+   
+   // Attendee struct
+   typedef struct {
+       int id;
+       char name[20];
+       int age;
+       char state;
+       char address[7];
+       char ActivityZone[35];
+       int numOfCompanion;
+       Companion *listOfCompanion;
+       float totalFees;
+       float balance;
+       float activityFee;
+       Date *date;
+      struct Attendee *next ;
+   } Attendee;
+   
+   
+   typedef struct {
+       char name[35];
+       float price;
+       Date startDate;
+       Date endDate;
+       int freePassAge;
+       int ageRestriction;
+   } activity;
+   
+      
+   void readFile(); //Heila Al-Mogren
+   void showMainMenu(); //Alanoud Al-ashSheikh
+   void addNewAttendee(); //Alanoud KG
+   void editRecord();
+   
+   void editActivity();
+   
+   void showAttendeeReport();
+   
+   void showAttendee();
+   
+   void deleteRecord();
+   
+   void writeAttendee(char *fileName);
+   
+   void printList();
+      
+   Attendee *registered = NULL ;
+   Attendee *singleVisit = NULL ;
+   Attendee *registered_head,*singleVisit_head, *registered_cur, *singleVisit_cur;
+   activity *ActivitiesList = NULL;
+       
+   
+   int main() {
 
-typedef struct {
-    int yy;
-    int mm;
-    int dd;
-} Date;
-
-
-// Attendee struct
-typedef struct {
-    int id;
-    char name[20];
-    int age;
-    char state;
-    char address[7];
-    char ActivityZone[35];
-    int numOfCompanion;
-    struct Companion **listOfCompanion;
-    float totalFees;
-    float balance;
-    float activityFee;
-    struct Date *date;
-} Attendee;
-
-
-typedef struct {
-    char name[35];
-    float price;
-    Date startDate;
-    Date endDate;
-    int freePassAge;
-    int ageRestriction;
-
-} activity;
-
-struct node {
-    Attendee val;
-    struct node *next;
-};
-
-void readFile(); //Heila Al-Mogren
-void showMainMenu(); //Alanoud Al-ashSheikh
-void addNewAttendee(); //Alanoud KG
-void editRecord();
-
-void editActivity();
-
-void showAttendeeReport();
-
-void showAttendee();
-
-void deleteRecord();
-
-void writeAttendee(char *fileName);
-
-void printList();
-
-// Data structures
-void deleteNode(struct node **head, int id);
-void printList(struct node * head);
-void insertAtEnd(struct node **head, Attendee attendee);
-void insertAtBeginning(struct node **head, Attendee attendee);
-
-
-int main() {
-
-    struct node *registered_head, *prev, *cur;
-    registered_head = (struct node *) malloc(sizeof(struct node));
-
-
-    Attendee registered;
-    registered_head->val = registered;
-
-    struct node *singleVisit_head;
-    singleVisit_head = (struct node *) malloc(sizeof(struct node));
-
-    // allocate memory for activity list (array)
-    activity *ActivitiesList = (activity *) calloc(10, sizeof(activity));
 
     // read file and fill activity list
     readFile();
 
-    struct node singleVisit;
+    
 
     return 0;
-}
+   }
+   
+   
+   void addNewAttendee(){
+   Attendee *temp = (Attendee*) malloc(sizeof(Attendee));
+   
+   printf("Enter The Attende ID:");
+   scanf("%d", &temp -> id );
+   
+   printf("Enter The Attende Name:");
+   scanf("%s", temp -> name );
+   
+   printf("Enter The Attende Age:");
+   scanf("%d", &temp -> age );
+   
+   printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
+   scanf("%s", temp -> address );
+   
+   printf("Enter numuer Of Companion:");
+   scanf("%d", &temp -> numOfCompanion );
+   if( temp -> numOfCompanion = 0 ){
+   temp -> state = 'V' ;
+   temp -> listOfCompanion = NULL ;
+   }
+   else if ( temp -> numOfCompanion > 0 ){
+   temp -> state = 'R' ;
+   
+   temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
+   Companion Ctemp ;
+   int i ;
+   
+   for ( i = 0 ; i<temp -> numOfCompanion ; i++){
+   
+   printf("Enter #%d  Companion ID:" , (i+1) );
+   scanf("%d", &Ctemp.id );
+   
+   printf("Enter #%d  Companion Name:" , (i+1) );
+   scanf("%s", Ctemp.name );
+   
+   printf("Enter #%d  Companion Age:" , (i+1) );
+   scanf("%d", &Ctemp.age );
+   
+   printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):" , (i+1) );
+   scanf("%d", &Ctemp.address );
+      
+   *(temp -> listOfCompanion + i) = Ctemp ;
+   }//end loop
+   
+   }//end if val.state == 'R'
+   
+   printf("Enter the day of your Reservation ");
+   scanf("%d", temp -> date ->dd );
+   printf("Enter the month of your Reservation ");
+   scanf("%d", temp -> date ->mm );
+   printf("Enter the year of your Reservation ");
+   scanf("%d", temp -> date ->yy );
+   
+   
+   if( temp -> numOfCompanion > 0 ){ //add the record to the registered linked list
+     if (*registered_head == NULL) { //if the list is empty
+           *registered_head = (Attendee *) malloc(sizeof(Attendee));
+           (*registered_head) = temp;
+           (*registered_head)->next = NULL; }
+      else { //if the list has at least one node
+            *registered_cur = *registered_head;
+      while (registered_cur->next != NULL) 
+            registered_cur = registered_cur->next; }
+           } 
+           
+   else {//add the record to the singleVisit linked list
+     if (*singleVisit_head == NULL) { //if the list is empty
+           *singleVisit_head = (Attendee *) malloc(sizeof(Attendee));
+           (*singleVisit_head) = temp;
+           (*singleVisit_head)->next = NULL; }
+      else { //if the list has at least one node
+            *singleVisit_cur = *singleVisit_head;
+      while (singleVisit_cur->next != NULL) 
+            singleVisit_cur = singleVisit_cur->next; }
+        } 
 
-void readFile() {
+       
+   }//end addNewAttendee
+   
+   
+   void readFile() {
+   
+   }
+   
+   void showMainMenu() {
+   
+   }
+   
+  /* void insertAtBeginning(struct node **head, Attendee attendee) {
+       Node *newNode = (Node *) malloc(sizeof(Node));
+       newNode->val = attendee;
+       newNode->next = *head;
+       *head = newNode;
+   }
+   
+   void insertAtEnd(struct node **head, Attendee attendee){
+       if (*head == NULL) { //if the list is empty
+           *head = (Node *) malloc(sizeof(Node));
+           (*head)->val = attendee;
+           (*head)->next = NULL; }
+       else { //if the list has at least one node
+           Node * current = *head;
+           while (current->next != NULL) {
+               current = current->next;
+           }
+   /* now we can add a new variable */
+        /*   current->next = (Node *)malloc(sizeof(Node));
+           current->next->val = attendee;
+           current->next->next = NULL;
+       } }
+   
+   
+   void printList(Node* head) {
+       Node * current = head;
+       while(current != NULL)
+       {
+           printf("%d->",current->val); // edit this to show the details of attendee
+           current = current ->next;
+       }
+   }
+   
+   
+   void deleteNode(Node **head, int id) {
+       if (*head != NULL) {
+           if ((*head)->val.id == id) { //if the deleted node is the first node
+               Node * temp = *head;
+               *head = (*head)->next;
+               free(temp);
+           }
+           else {
+               Node *prev = *head;
+               Node *cur = (*head)->next ;
+               while (cur != NULL) {
+                   if (cur->val.id == id) {
+                       prev->next = cur->next;
+                       free(cur);
+                       break; } //exit loop when delete the node
+                   prev = cur;
+                   cur = cur ->next;
+               } } } } */
+               
+               
+               
+               
+    //struct node *registered_head, *prev, *cur;
+    //registered_head = (struct node *) malloc(sizeof(struct node));
 
-}
 
-void showMainMenu() {
+    
+    //registered_head->val = registered; 
 
-}
+    //struct node *singleVisit_head;
+    //singleVisit_head = (struct node *) malloc(sizeof(struct node));
 
-void insertAtBeginning(struct node **head, Attendee attendee) {
-    struct node *newNode = (struct node *) malloc(sizeof(struct node));
-    newNode->val = attendee;
-    newNode->next = *head;
-    *head = newNode;
-}
-
-void insertAtEnd(struct node **head, Attendee attendee){
-    if (*head == NULL) { //if the list is empty
-        *head = (struct node *) malloc(sizeof(struct node));
-        (*head)->val = attendee;
-        (*head)->next = NULL; }
-    else { //if the list has at least one node
-        struct node * current = *head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-/* now we can add a new variable */
-        current->next = (struct node *)malloc(sizeof(struct node));
-        current->next->val = attendee;
-        current->next->next = NULL;
-    } }
+    // allocate memory for activity list (array)
+    //activity *ActivitiesList = (activity *) calloc(10, sizeof(activity));
 
 
-void printList(struct node * head) {
-    struct node * current = head;
-    while(current != NULL)
-    {
-        printf("%d->",current->val); // edit this to show the details of attendee
-        current = current ->next;
-    }
-}
-
-
-void deleteNode(struct node **head, int id) {
-    if (*head != NULL) {
-        if ((*head)->val.id == id) { //if the deleted node is the first node
-            struct node * temp = *head;
-            *head = (*head)->next;
-            free(temp);
-        }
-        else {
-            struct node *prev = *head;
-            struct node *cur = (*head)->next ;
-            while (cur != NULL) {
-                if (cur->val.id == id) {
-                    prev->next = cur->next;
-                    free(cur);
-                    break; } //exit loop when delete the node
-                prev = cur;
-                cur = cur ->next;
-            } } } }
+   // Data structures
+   //void deleteNode(struct node **head, int id);
+   //void printList(struct node * head);
+   //void insertAtEnd(struct node **head, Attendee attendee);
+   //void insertAtBeginning(struct node **head, Attendee attendee);
+    
+    
+     /*  printf("Enter The Attende State:");
+   scanf("%c", &temp -> state );
+   if( temp -> state == 'V'   || temp -> state == 'v' )
+   temp ->numOfCompanion = 0 ;
+   else if( temp -> state == 'R'   || temp -> state == 'r' ){
+   printf("Enter numuer Of Companion:");
+   scanf("%d", &temp -> numOfCompanion );
+   temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
+   int i ;
+   Companion Ctemp ; */
+   
