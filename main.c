@@ -68,7 +68,7 @@
    struct Attendee *registered = NULL ;
    struct Attendee *singleVisit = NULL ;
    struct Attendee *registered_head,*singleVisit_head, *registered_cur, *singleVisit_cur;
-   struct activity *ActivitiesList = NULL;
+   activity *activities = NULL;
        
    
    int main() {
@@ -167,7 +167,7 @@
    void readFile() {
 
 
-       activity *activities = NULL;
+
        int nActivities = 0;
 
        FILE *fp;
