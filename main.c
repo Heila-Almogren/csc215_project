@@ -173,8 +173,11 @@
        FILE *fp;
        fp = fopen("../Activities.txt", "r");
 
-       if (fp == NULL)
+       if (fp == NULL){
            printf("Can’t open %s\n","Activities.txt" );
+           return;
+       }
+
 
        char tx[200];
        char name[35];
