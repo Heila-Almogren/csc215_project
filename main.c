@@ -33,7 +33,7 @@
        float activityFee;
        Date *date;
       struct Attendee *next ;
-   } Attendee;
+   } ;
    
    
    typedef struct {
