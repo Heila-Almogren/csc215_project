@@ -310,8 +310,8 @@
    }
 
    void test_readFile(activity activities[]) {
-
-       for (int i = 0; i < 10; i++) {
+       int i;
+       for ( i= 0; i < 10; i++) {
            printf("%d | Name: %-32s\t Price: %-18lf\t Date:%d/%d/%d-%d/%d/%d \t freePassAge:%d\t ageRestriction: %d\n",
                   i + 1,
                   activities[i].name,
