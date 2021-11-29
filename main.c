@@ -172,6 +172,10 @@
 
        FILE *fp;
        fp = fopen("../Activities.txt", "r");
+
+       if (fp == NULL)
+           printf("Can’t open %s\n","Activities.txt" );
+
        char tx[200];
        char name[35];
        double price = 0;
