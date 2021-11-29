@@ -19,7 +19,7 @@
    
    
    // Attendee struct
-   typedef struct {
+   struct Attendee {
        int id;
        char name[20];
        int age;
@@ -63,10 +63,10 @@
    
    void printList();
       
-   Attendee *registered = NULL ;
-   Attendee *singleVisit = NULL ;
-   Attendee *registered_head,*singleVisit_head, *registered_cur, *singleVisit_cur;
-   activity *ActivitiesList = NULL;
+   struct Attendee *registered = NULL ;
+   struct Attendee *singleVisit = NULL ;
+   struct Attendee *registered_head,*singleVisit_head, *registered_cur, *singleVisit_cur;
+   struct activity *ActivitiesList = NULL;
        
    
    int main() {
@@ -82,7 +82,7 @@
    
    
    void addNewAttendee(){
-   Attendee *temp = (Attendee*) malloc(sizeof(Attendee));
+   struct Attendee *temp = (struct Attendee*) malloc(sizeof(struct Attendee));
    
    printf("Enter The Attende ID:");
    scanf("%d", &temp -> id );
@@ -137,23 +137,23 @@
    
    
    if( temp -> numOfCompanion > 0 ){ //add the record to the registered linked list
-     if (*registered_head == NULL) { //if the list is empty
-           *registered_head = (Attendee *) malloc(sizeof(Attendee));
-           (*registered_head) = temp;
-           (*registered_head)->next = NULL; }
+     if (registered_head == NULL) { //if the list is empty
+           registered_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+           (registered_head) = temp;
+           (registered_head)->next = NULL; }
       else { //if the list has at least one node
-            *registered_cur = *registered_head;
+            registered_cur = registered_head;
       while (registered_cur->next != NULL) 
             registered_cur = registered_cur->next; }
            } 
            
    else {//add the record to the singleVisit linked list
-     if (*singleVisit_head == NULL) { //if the list is empty
-           *singleVisit_head = (Attendee *) malloc(sizeof(Attendee));
-           (*singleVisit_head) = temp;
-           (*singleVisit_head)->next = NULL; }
+     if (singleVisit_head == NULL) { //if the list is empty
+           singleVisit_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+           (singleVisit_head) = temp;
+           (singleVisit_head)->next = NULL; }
       else { //if the list has at least one node
-            *singleVisit_cur = *singleVisit_head;
+            singleVisit_cur = singleVisit_head;
       while (singleVisit_cur->next != NULL) 
             singleVisit_cur = singleVisit_cur->next; }
         } 
