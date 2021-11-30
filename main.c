@@ -614,7 +614,69 @@ bool isDateInFuture(char date[]) {
 }
 
 void showMainMenu() {
+    printf("--------------------");
+        printf("WELCOME TO");
+        printf("Riyadh Season 2021");
+        printf("Imagine, MORE!!");
+        printf("--------------------");
 
+        readFile();
+        
+
+        int entered=0;
+        do{
+        
+        printf("Enter the corresponding no");
+        printf("1.Add new attendee record");
+        printf("2.Search or edit record");
+        printf("3.Edit attendee");
+        printf("4.Edit activity");
+        printf("5.Show report");
+        printf("6.Know the records of attendees");
+        printf("7.Delete the records");
+        printf("8.Exit from the program");
+
+        scanf("%d",&entered);
+        switch(entered){
+            case 1:
+                addNewAttendee();
+            break;
+                
+            case 2:
+                editRecord();
+            break;
+
+            case 3:
+                editRecord();
+            break;
+
+            case 4:
+                editActivity();
+            break;
+
+            case 5:
+                showAttendeeReport();
+            break;
+
+            case 6:
+                showattendee();
+            break;
+
+            case 7:
+                deleterecord();
+            break;
+
+            case 8:
+                printf("Goodbye!");
+            break;
+
+
+            default:
+            printf("invalid input, please try again.")
+
+        };
+
+        }while(entered!=8);
 }
 
 /* void insertAtBeginning(struct node **head, Attendee attendee) {
