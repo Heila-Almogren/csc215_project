@@ -1,423 +1,707 @@
-   #include <stdio.h>
-   #include <stdlib.h>
-   #include <string.h>
-   #include <stdbool.h>
-   #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <time.h>
 
-   typedef struct {
-       int id;
-       char name[20];
-       int age;
-       char gender;
-       char address[7];
-   } Companion;
-   
-   typedef struct {
-       int yy;
-       int mm;
-       int dd;
-   } Date;
-   
-   
-   // Attendee struct
-   struct Attendee {
-       int id;
-       char name[20];
-       int age;
-       char state;
-       char address[7];
-       char ActivityZone[35];
-       int numOfCompanion;
-       Companion *listOfCompanion;
-       float totalFees;
-       float balance;
-       float activityFee;
-       Date *date;
-      struct Attendee *next ;
-   } ;
-   
-   
-   typedef struct {
-       char name[35];
-       float price;
-       Date startDate;
-       Date endDate;
-       int freePassAge;
-       int ageRestriction;
-   } activity;
-   
-      
-   void readFile(); //Heila Al-Mogren
-   void test_readFile(activity activities[]);
-   void showMainMenu(); //Alanoud Al-ashSheikh
-   void addNewAttendee(); //Alanoud KG
-   void editRecord();
-   
-   void editActivity();
-   
-   void showAttendeeReport();
-   
-   void showAttendee();
-   
-   void deleteRecord();
-   
-   void writeAttendee(char *fileName);
-   
-   void printList();
-      
-   struct Attendee *registered = NULL ;
-   struct Attendee *singleVisit = NULL ;
-   struct Attendee *registered_head,*singleVisit_head, *registered_cur, *singleVisit_cur;
-   activity *activities = NULL;
-       
-   
-   int main() {
+
+typedef struct {
+    int id;
+    char name[20];
+    int age;
+    char gender;
+    char address[7];
+} Companion;
+
+typedef struct {
+    int yy;
+    int mm;
+    int dd;
+} Date;
+
+
+// Attendee struct
+struct Attendee {
+    int id;
+    char name[20];
+    int age;
+    char state;
+    char address[7];
+    char ActivityZone[35];
+    int numOfCompanion;
+    Companion *listOfCompanion;
+    float totalFees;
+    float balance;
+    float activityFee;
+    Date *date;
+    struct Attendee *next;
+};
+
+
+typedef struct {
+    char name[35];
+    float price;
+    Date startDate;
+    Date endDate;
+    int freePassAge;
+    int ageRestriction;
+} activity;
+
+
+void readFile(); //Heila Al-Mogren
+void test_readFile(activity activities[]);
+
+void showMainMenu(); //Alanoud Al-ashSheikh
+void addNewAttendee(); //Alanoud KG
+void editRecord();
+
+void editActivity();
+
+void showAttendeeReport();
+
+void showAttendee();
+
+void deleteRecord();
+
+void writeAttendee(char *fileName);
+
+bool isDateInFuture(char date[]);
+
+void printList();
+
+bool isDateValid(char date[]);
+
+bool isDateFormatValid(char date[]);
+int compareDates(Date date1, Date date2);
+void assignDate(Date *date, char stringDate[]);
+
+struct Attendee *registered = NULL;
+struct Attendee *singleVisit = NULL;
+struct Attendee *registered_head, *singleVisit_head, *registered_cur, *singleVisit_cur;
+activity *activities = NULL;
+
+
+int main() {
 
 
     // read file and fill activity list
     readFile();
-
-    
-
+    editActivity();
     return 0;
-   }
-   
-   
-   void addNewAttendee(){
-   struct Attendee *temp = (struct Attendee*) malloc(sizeof(struct Attendee));
-   
-   printf("Enter The Attende ID:");
-   scanf("%d", &temp -> id );
-   
-   printf("Enter The Attende Name:");
-   scanf("%s", temp -> name );
-   
-   printf("Enter The Attende Age:");
-   scanf("%d", &temp -> age );
-   
-   printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
-   scanf("%s", temp -> address );
-   
-   printf("Enter numuer Of Companion:");
-   scanf("%d", &temp -> numOfCompanion );
-   if( temp -> numOfCompanion = 0 ){
-   temp -> state = 'V' ;
-   temp -> listOfCompanion = NULL ;
-   }
-   else if ( temp -> numOfCompanion > 0 ){
-   temp -> state = 'R' ;
-   
-   temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
-   Companion Ctemp ;
-   int i ;
-   
-   for ( i = 0 ; i<temp -> numOfCompanion ; i++){
-   
-   printf("Enter #%d  Companion ID:" , (i+1) );
-   scanf("%d", &Ctemp.id );
-   
-   printf("Enter #%d  Companion Name:" , (i+1) );
-   scanf("%s", Ctemp.name );
-   
-   printf("Enter #%d  Companion Age:" , (i+1) );
-   scanf("%d", &Ctemp.age );
-   
-   printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):" , (i+1) );
-   scanf("%d", &Ctemp.address );
-      
-   *(temp -> listOfCompanion + i) = Ctemp ;
-   }//end loop
-   
-   }//end if val.state == 'R'
-   
-   printf("Enter the day of your Reservation ");
-   scanf("%d", temp -> date ->dd );
-   printf("Enter the month of your Reservation ");
-   scanf("%d", temp -> date ->mm );
-   printf("Enter the year of your Reservation ");
-   scanf("%d", temp -> date ->yy );
-   
-   
-   if( temp -> numOfCompanion > 0 ){ //add the record to the registered linked list
-     if (registered_head == NULL) { //if the list is empty
-           registered_head = (struct Attendee *) malloc(sizeof(struct Attendee));
-           (registered_head) = temp;
-           (registered_head)->next = NULL; }
-      else { //if the list has at least one node
+}
+
+
+void addNewAttendee() {
+    struct Attendee *temp = (struct Attendee *) malloc(sizeof(struct Attendee));
+
+    printf("Enter The Attende ID:");
+    scanf("%d", &temp->id);
+
+    printf("Enter The Attende Name:");
+    scanf("%s", temp->name);
+
+    printf("Enter The Attende Age:");
+    scanf("%d", &temp->age);
+
+    printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
+    scanf("%s", temp->address);
+
+    printf("Enter numuer Of Companion:");
+    scanf("%d", &temp->numOfCompanion);
+    if (temp->numOfCompanion = 0) {
+        temp->state = 'V';
+        temp->listOfCompanion = NULL;
+    } else if (temp->numOfCompanion > 0) {
+        temp->state = 'R';
+
+        temp->listOfCompanion = (Companion *) calloc(temp->numOfCompanion, sizeof(Companion));
+        Companion Ctemp;
+        int i;
+
+        for (i = 0; i < temp->numOfCompanion; i++) {
+
+            printf("Enter #%d  Companion ID:", (i + 1));
+            scanf("%d", &Ctemp.id);
+
+            printf("Enter #%d  Companion Name:", (i + 1));
+            scanf("%s", Ctemp.name);
+
+            printf("Enter #%d  Companion Age:", (i + 1));
+            scanf("%d", &Ctemp.age);
+
+            printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):", (i + 1));
+            scanf("%d", &Ctemp.address);
+
+            *(temp->listOfCompanion + i) = Ctemp;
+        }//end loop
+
+    }//end if val.state == 'R'
+
+    printf("Enter the day of your Reservation ");
+    scanf("%d", temp->date->dd);
+    printf("Enter the month of your Reservation ");
+    scanf("%d", temp->date->mm);
+    printf("Enter the year of your Reservation ");
+    scanf("%d", temp->date->yy);
+
+
+    if (temp->numOfCompanion > 0) { //add the record to the registered linked list
+        if (registered_head == NULL) { //if the list is empty
+            registered_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+            (registered_head) = temp;
+            (registered_head)->next = NULL;
+        } else { //if the list has at least one node
             registered_cur = registered_head;
-      while (registered_cur->next != NULL) 
-            registered_cur = registered_cur->next; }
-           } 
-           
-   else {//add the record to the singleVisit linked list
-     if (singleVisit_head == NULL) { //if the list is empty
-           singleVisit_head = (struct Attendee *) malloc(sizeof(struct Attendee));
-           (singleVisit_head) = temp;
-           (singleVisit_head)->next = NULL; }
-      else { //if the list has at least one node
+            while (registered_cur->next != NULL)
+                registered_cur = registered_cur->next;
+        }
+    } else {//add the record to the singleVisit linked list
+        if (singleVisit_head == NULL) { //if the list is empty
+            singleVisit_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+            (singleVisit_head) = temp;
+            (singleVisit_head)->next = NULL;
+        } else { //if the list has at least one node
             singleVisit_cur = singleVisit_head;
-      while (singleVisit_cur->next != NULL) 
-            singleVisit_cur = singleVisit_cur->next; }
-        } 
-
-       
-   }//end addNewAttendee
+            while (singleVisit_cur->next != NULL)
+                singleVisit_cur = singleVisit_cur->next;
+        }
+    }
 
 
-   void readFile() {
+}//end addNewAttendee
 
 
-
-       int nActivities = 0;
-
-       FILE *fp;
-       fp = fopen("../Activities.txt", "r");
-
-       if (fp == NULL){
-           printf("Can’t open %s\n","Activities.txt" );
-           return;
-       }
+void readFile() {
 
 
-       char tx[200];
-       char name[35];
-       double price = 0;
+    int nActivities = 0;
+
+    FILE *fp;
+    fp = fopen("../Activities.txt", "r");
+
+    if (fp == NULL) {
+        printf("Can’t open %s\n", "Activities.txt");
+        return;
+    }
+
+
+    char tx[200];
+    char name[35];
+    double price = 0;
 //    Date startDate;
 //    Date endDate;
-       int freePassAge = 0;
-       int ageRestriction = 0;
-       char fullDate[50];
+    int freePassAge = 0;
+    int ageRestriction = 0;
+    char fullDate[50];
 
-       char startDate_dd[33];
-       char startDate_mm[33];
-       char startDate_yy[33];
-       char endDate_dd[33];
-       char endDate_mm[33];
-       char endDate_yy[33];
+    char startDate_dd[33];
+    char startDate_mm[33];
+    char startDate_yy[33];
+    char endDate_dd[33];
+    char endDate_mm[33];
+    char endDate_yy[33];
 
 
-       char *eof;
-       int line_counter = 0;
+    char *eof;
+    int line_counter = 0;
 
-       // Skip first two lines
-       eof = fgets(tx, 200, fp);
-       eof = fgets(tx, 200, fp);
+    // Skip first two lines
+    eof = fgets(tx, 200, fp);
+    eof = fgets(tx, 200, fp);
 
-       while (eof) {
+    while (eof) {
 
-           activities = realloc(activities, (nActivities + 1) * sizeof(activity));
-           activity ac;
+        activities = realloc(activities, (nActivities + 1) * sizeof(activity));
+        activity ac;
 
-           // Get name
-           eof = fgets(tx, 33, fp);
-           sscanf(tx, "%[^\\n]s", name);
-           // Remove extra space
-           char *last = name + strlen(name);
-           while (isspace(*--last));
-           *(last + 1) = '\0';
-           strcpy(ac.name, name);
+        // Get name
+        eof = fgets(tx, 33, fp);
+        sscanf(tx, "%[^\\n]s", name);
+        // Remove extra space
+        char *last = name + strlen(name);
+        while (isspace(*--last));
+        *(last + 1) = '\0';
+        strcpy(ac.name, name);
 
-           // Get Price
-           eof = fgets(tx, 18, fp);
-           sscanf(tx, "%lf", &price);
-           ac.price = price;
+        // Get Price
+        eof = fgets(tx, 18, fp);
+        sscanf(tx, "%lf", &price);
+        ac.price = price;
 
-           // Get date
-           eof = fgets(tx, 32, fp);
-           printf("Date: %s\n", tx);
-           sscanf(tx, "%s", fullDate);
-           printf("Full date is is %s\n", fullDate);
+        // Get date
+        eof = fgets(tx, 32, fp);
+        printf("Date: %s\n", tx);
+        sscanf(tx, "%s", fullDate);
+        printf("Full date is is %s\n", fullDate);
 //        2021/11/01-2022/04/01
 
-           sscanf(tx, "%s", fullDate);
-           //start date (day)
-           strcpy(startDate_dd, tx);
+        sscanf(tx, "%s", fullDate);
+        //start date (day)
+        strcpy(startDate_dd, tx);
 
-           *(startDate_dd + 4) = '\0';
-           sscanf(startDate_dd, "%d", &ac.startDate.dd);
+        *(startDate_dd + 4) = '\0';
+        sscanf(startDate_dd, "%d", &ac.startDate.dd);
 
-           //start date (month)
-           strcpy(startDate_mm, tx + 5);
-           *(startDate_mm + 2) = '\0';
-           sscanf(startDate_mm, "%d", &ac.startDate.mm);
+        //start date (month)
+        strcpy(startDate_mm, tx + 5);
+        *(startDate_mm + 2) = '\0';
+        sscanf(startDate_mm, "%d", &ac.startDate.mm);
 
-           //start date (year)
-           strcpy(startDate_yy, tx + 8);
-           *(startDate_yy + 2) = '\0';
-           sscanf(startDate_yy, "%d", &ac.startDate.yy);
-
-
-           //end date (day)
-           strcpy(endDate_dd, tx+11);
-           *(endDate_dd + 4) = '\0';
-           sscanf(endDate_dd, "%d", &ac.endDate.dd);
-
-           //end date (month)
-           strcpy(endDate_mm, tx + 16);
-           *(endDate_mm + 2) = '\0';
-           sscanf(endDate_mm, "%d", &ac.endDate.mm);
-
-           //end date (year)
-           strcpy(endDate_yy, tx + 19);
-           *(endDate_yy + 2) = '\0';
-           sscanf(endDate_yy, "%d", &ac.endDate.yy);
+        //start date (year)
+        strcpy(startDate_yy, tx + 8);
+        *(startDate_yy + 2) = '\0';
+        sscanf(startDate_yy, "%d", &ac.startDate.yy);
 
 
+        //end date (day)
+        strcpy(endDate_dd, tx + 11);
+        *(endDate_dd + 4) = '\0';
+        sscanf(endDate_dd, "%d", &ac.endDate.dd);
+
+        //end date (month)
+        strcpy(endDate_mm, tx + 16);
+        *(endDate_mm + 2) = '\0';
+        sscanf(endDate_mm, "%d", &ac.endDate.mm);
+
+        //end date (year)
+        strcpy(endDate_yy, tx + 19);
+        *(endDate_yy + 2) = '\0';
+        sscanf(endDate_yy, "%d", &ac.endDate.yy);
 
 
 
-           // ignore the <
-           eof = fgets(tx, 2, fp);
-           printf("Ignored sign: %s\n", tx);
-
-           if (strcmp(tx, "-") == 0) {
-               freePassAge = -1;
-               eof = fgets(tx, 19, fp);
-           } else {
-               // Get FREEPASS
-               eof = fgets(tx, 19, fp);
-               printf("Free pass: %s\n", tx);
-               sscanf(tx, "%d", &freePassAge);
-           }
-
-           // ignore the > or
-           eof = fgets(tx, 2, fp);
-           printf("Ignored sign: %s\n", tx);
-
-           if (strcmp(tx, "-") == 0) {
-               ageRestriction = -1;
-               eof = fgets(tx, 20, fp);
-           } else {
-               // Get minimum age
-               eof = fgets(tx, 20, fp);
-               printf("Min Age: %s\n", tx);
-               sscanf(tx, "%d", &ageRestriction);
-           }
-
-           line_counter++;
 
 
-           ac.freePassAge = freePassAge;
-           ac.ageRestriction = ageRestriction;
+        // ignore the <
+        eof = fgets(tx, 2, fp);
+        printf("Ignored sign: %s\n", tx);
 
-           *(activities + nActivities) = ac;
-           nActivities++;
-       };
+        if (strcmp(tx, "-") == 0) {
+            freePassAge = -1;
+            eof = fgets(tx, 19, fp);
+        } else {
+            // Get FREEPASS
+            eof = fgets(tx, 19, fp);
+            printf("Free pass: %s\n", tx);
+            sscanf(tx, "%d", &freePassAge);
+        }
 
-       fclose(fp);
+        // ignore the > or
+        eof = fgets(tx, 2, fp);
+        printf("Ignored sign: %s\n", tx);
 
-       test_readFile(activities);
+        if (strcmp(tx, "-") == 0) {
+            ageRestriction = -1;
+            eof = fgets(tx, 20, fp);
+        } else {
+            // Get minimum age
+            eof = fgets(tx, 20, fp);
+            printf("Min Age: %s\n", tx);
+            sscanf(tx, "%d", &ageRestriction);
+        }
+
+        line_counter++;
+
+
+        ac.freePassAge = freePassAge;
+        ac.ageRestriction = ageRestriction;
+
+        *(activities + nActivities) = ac;
+        nActivities++;
+    };
+
+    fclose(fp);
+
+    test_readFile(activities);
+}
+
+void test_readFile(activity activities[]) {
+    int i;
+    for (i = 0; i < 10; i++) {
+        printf("%d | Name: %-32s\t Price: %-18lf\t Date:%d/%d/%d-%d/%d/%d \t freePassAge:%d\t ageRestriction: %d\n",
+               i + 1,
+               activities[i].name,
+               activities[i].price,
+               activities[i].startDate.dd,
+               activities[i].startDate.mm,
+               activities[i].startDate.yy,
+               activities[i].endDate.dd,
+               activities[i].endDate.mm,
+               activities[i].endDate.yy,
+               activities[i].freePassAge,
+               activities[i].ageRestriction
+        );
+
+    }
+}
+
+
+void editActivity() {
+
+    /*
+     * char name[35];
+    float price;
+    Date startDate;
+    Date endDate;
+    int freePassAge;
+    int ageRestriction;
+     */
+
+    char activity_name[53];
+    bool found = false;
+    printf("Enter the name of the activity you want to edit\n> ");
+    scanf("%[^\n]s", activity_name);
+    int i;
+    for (i = 0; i < 10; i++) {
+//        printf("%s VS %s\n", activities[i].name, activity_name);
+        if (strcmp(activities[i].name, activity_name) == 0) {
+            found = true;
+            printf("Activity found!\nWhat Do you to edit:\n");
+            printf("1. Activity Name\n");
+            printf("2. Activity Price\n");
+            printf("3. Activity Start Date\n");
+            printf("4. Activity End Date\n");
+            printf("5. Activity Free Pass Age\n");
+            printf("6. Activity Age Restriction\n> ");
+            int option;
+            bool valid_option;
+            do {
+                valid_option = true;
+                scanf("%d", &option);
+                switch (option) {
+                    case 1: {
+                        char new_name[30];
+                        printf("Enter the new name:\n> ");
+                        scanf(" %[^\n]s", new_name);
+                        strcpy(activities[i].name, new_name);
+                        printf("Done! ✨");
+                    };
+                        break;
+                    case 2: {
+                        float new_price;
+                        printf("Enter the new price:\n> ");
+                        scanf(" %f", &new_price);
+                        activities[i].price = new_price;
+                        printf("Done! ✨");
+                    };
+                        break;
+                    case 3: {
+                        bool valid_date = true;
+                        printf("Enter the new start date (in the format yyyy/mm/dd):\n> ");
+                        char new_startDate[30];
+                        do {
+                            valid_date = true;
+                            scanf(" %[^\n]s", new_startDate);
+
+                            if (!isDateValid(new_startDate)) {
+                                valid_date = false;
+                                if (!isDateFormatValid(new_startDate)) {
+                                    printf("Date format is invalid, please re-enter the date:\n> ");
+                                } else {
+                                    if (!isDateInFuture(new_startDate)) {
+                                        printf("Date is in the past, please re-enter the date:\n> ");
+                                    }
+                                }
+                            }
+                        } while (!valid_date);
+
+                        assignDate(&(activities[i].startDate), new_startDate);
+                        printf("result: %d/%d/%d", activities[i].startDate.yy, activities[i].startDate.mm,
+                               activities[i].startDate.dd);
+                        printf("Done! ✨");
+                    };
+                        break;
+                    case 4: {
+
+                        bool valid_date = true;
+                        printf("Enter the new end date (in the format yyyy/mm/dd):\n> ");
+                        char new_endDate[30];
+                        do {
+                            valid_date = true;
+                            scanf(" %[^\n]s", new_endDate);
+
+                            if (!isDateValid(new_endDate)) {
+                                valid_date = false;
+                                if (!isDateFormatValid(new_endDate)) {
+                                    printf("Date format is invalid, please re-enter the date:\n> ");
+                                } else {
+                                    if (!isDateInFuture(new_endDate)) {
+                                        printf("Date is in the past, please re-enter the date:\n> ");
+                                    }
+                                }
+                            }else{
+                                Date dateToCompare;
+                                assignDate(&(dateToCompare), new_endDate);
+                                if(compareDates(activities[i].startDate, dateToCompare)<0){
+                                    valid_date = false;
+                                    printf("End date is before start date, please re-enter the date:\n> ");
+                                }
+                            }
+                        } while (!valid_date);
+
+                        assignDate(&(activities[i].endDate), new_endDate);
+                        printf("result: %d/%d/%d", activities[i].endDate.yy, activities[i].endDate.mm,
+                               activities[i].endDate.dd);
+                        printf("Done! ✨");
+
+                    };
+                        break;
+                    case 5: {
+                        int new_freePassAge;
+                        printf("Enter the new free pass age:\n> ");
+                        scanf(" %d", &new_freePassAge);
+                        activities[i].freePassAge = new_freePassAge;
+                        printf("Done! ✨");
+                    };
+                        break;
+                    case 6: {
+                        int new_ageRestriction;
+                        printf("Enter the new age restriction:\n> ");
+                        scanf(" %d", &new_ageRestriction);
+                        activities[i].ageRestriction = new_ageRestriction;
+                        printf("Done! ✨");
+                    };
+                        break;
+                    default: {
+                        valid_option = false;
+                        printf("Invalid option, please retry:\n> ");
+                    }
+                }
+            } while (!valid_option);
+
+        }
+
+    }
+    if (!found) {
+        printf("activity not found, add a new activity");
+    }
+
+}
+
+bool isDateValid(char date[]) {
+    if (isDateFormatValid(date) && isDateInFuture(date)) {
+        return true;
+    }
+    return false;
+}
+
+bool isDateFormatValid(char date[]) {
+
+    char month[3];
+    char day[3];
+
+    strncpy(month, date + 5, 2);
+    strncpy(day, date + 8, 2);
+
+    int test_month = atoi(month);
+    int test_day = atoi(day);
+
+    //test day
+    if (test_day > 30 || test_day < 1) {
+        return false;
+    }
+
+    //test month
+    if (test_month > 12 || test_month < 1) {
+        return false;
+    }
+
+    if (
+            isdigit(date[0]) &&
+            isdigit(date[1]) &&
+            isdigit(date[2]) &&
+            isdigit(date[3]) &&
+            date[4] == '/' &&
+            isdigit(date[5]) &&
+            isdigit(date[6]) &&
+            date[7] == '/' &&
+            isdigit(date[8]) &&
+            isdigit(date[9]) &&
+            strlen(date) == 10
+            )
+        return true;
+    return false;
+}
+
+int compareDates(Date date1, Date date2) {
+    if (date1.yy > date2.yy) {
+        return 1;
+    } else {
+        if (date1.yy == date2.yy) {
+            if (date1.mm > date2.mm) {
+                return 1;
+            } else {
+                if (date1.mm == date2.mm) {
+                    if (date1.dd > date2.dd) {
+                        return 1;
+                    } else {
+                        if (date1.dd == date2.dd) { return 0; }
+                        else {
+                            return -1;
+                        };
+                    }
+                } else {
+                    return -1;
+                }
+            }
+        } else {
+            return -1;
+        }
+    }
+    return -1;
+}
+
+void assignDate(Date *date, char stringDate[]) {
+
+    char year[5];
+    char month[3];
+    char day[3];
+    strncpy(year, stringDate, 4);
+    strncpy(month, stringDate + 5, 2);
+    strncpy(day, stringDate + 8, 2);
+
+    year[4] = '\0';
+    month[2] = '\0';
+    day[2] = '\0';
+
+    date->yy = atoi(year);
+    date->mm = atoi(month);
+    date->dd = atoi(day);
+
+
+}
+
+bool isDateInFuture(char date[]) {
+
+    char year[5];
+    char month[3];
+    char day[3];
+    strncpy(year, date, 4);
+    strncpy(month, date + 5, 2);
+    strncpy(day, date + 8, 2);
+
+    year[4] = '\0';
+    month[2] = '\0';
+    day[2] = '\0';
+
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+    int current_year = tm.tm_year + 1900;
+    int current_month = tm.tm_mon + 1;
+    int current_day = tm.tm_mday;
+
+    int test_year = atoi(year);
+    int test_month = atoi(month);
+    int test_day = atoi(day);
+
+
+    if (test_year < current_year) {
+        return false;
+    } else if (test_year == current_year) {
+        if (test_month < current_month) {
+            return false;
+        } else if (test_month == current_month) {
+            if (test_day < current_day) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void showMainMenu() {
+
+}
+
+/* void insertAtBeginning(struct node **head, Attendee attendee) {
+     Node *newNode = (Node *) malloc(sizeof(Node));
+     newNode->val = attendee;
+     newNode->next = *head;
+     *head = newNode;
+ }
+
+ void insertAtEnd(struct node **head, Attendee attendee){
+     if (*head == NULL) { //if the list is empty
+         *head = (Node *) malloc(sizeof(Node));
+         (*head)->val = attendee;
+         (*head)->next = NULL; }
+     else { //if the list has at least one node
+         Node * current = *head;
+         while (current->next != NULL) {
+             current = current->next;
+         }
+ /* now we can add a new variable */
+/*   current->next = (Node *)malloc(sizeof(Node));
+   current->next->val = attendee;
+   current->next->next = NULL;
+} }
+
+
+void printList(Node* head) {
+Node * current = head;
+while(current != NULL)
+{
+   printf("%d->",current->val); // edit this to show the details of attendee
+   current = current ->next;
+}
+}
+
+
+void deleteNode(Node **head, int id) {
+if (*head != NULL) {
+   if ((*head)->val.id == id) { //if the deleted node is the first node
+       Node * temp = *head;
+       *head = (*head)->next;
+       free(temp);
    }
-
-   void test_readFile(activity activities[]) {
-       int i;
-       for ( i= 0; i < 10; i++) {
-           printf("%d | Name: %-32s\t Price: %-18lf\t Date:%d/%d/%d-%d/%d/%d \t freePassAge:%d\t ageRestriction: %d\n",
-                  i + 1,
-                  activities[i].name,
-                  activities[i].price,
-                  activities[i].startDate.dd,
-                  activities[i].startDate.mm,
-                  activities[i].startDate.yy,
-                  activities[i].endDate.dd,
-                  activities[i].endDate.mm,
-                  activities[i].endDate.yy,
-                  activities[i].freePassAge,
-                  activities[i].ageRestriction
-           );
-
-       }
-   }
-   
-   void showMainMenu() {
-   
-   }
-   
-  /* void insertAtBeginning(struct node **head, Attendee attendee) {
-       Node *newNode = (Node *) malloc(sizeof(Node));
-       newNode->val = attendee;
-       newNode->next = *head;
-       *head = newNode;
-   }
-   
-   void insertAtEnd(struct node **head, Attendee attendee){
-       if (*head == NULL) { //if the list is empty
-           *head = (Node *) malloc(sizeof(Node));
-           (*head)->val = attendee;
-           (*head)->next = NULL; }
-       else { //if the list has at least one node
-           Node * current = *head;
-           while (current->next != NULL) {
-               current = current->next;
-           }
-   /* now we can add a new variable */
-        /*   current->next = (Node *)malloc(sizeof(Node));
-           current->next->val = attendee;
-           current->next->next = NULL;
-       } }
-   
-   
-   void printList(Node* head) {
-       Node * current = head;
-       while(current != NULL)
-       {
-           printf("%d->",current->val); // edit this to show the details of attendee
-           current = current ->next;
-       }
-   }
-   
-   
-   void deleteNode(Node **head, int id) {
-       if (*head != NULL) {
-           if ((*head)->val.id == id) { //if the deleted node is the first node
-               Node * temp = *head;
-               *head = (*head)->next;
-               free(temp);
-           }
-           else {
-               Node *prev = *head;
-               Node *cur = (*head)->next ;
-               while (cur != NULL) {
-                   if (cur->val.id == id) {
-                       prev->next = cur->next;
-                       free(cur);
-                       break; } //exit loop when delete the node
-                   prev = cur;
-                   cur = cur ->next;
-               } } } } */
-               
-               
-               
-               
-    //struct node *registered_head, *prev, *cur;
-    //registered_head = (struct node *) malloc(sizeof(struct node));
+   else {
+       Node *prev = *head;
+       Node *cur = (*head)->next ;
+       while (cur != NULL) {
+           if (cur->val.id == id) {
+               prev->next = cur->next;
+               free(cur);
+               break; } //exit loop when delete the node
+           prev = cur;
+           cur = cur ->next;
+       } } } } */
 
 
-    
-    //registered_head->val = registered; 
-
-    //struct node *singleVisit_head;
-    //singleVisit_head = (struct node *) malloc(sizeof(struct node));
-
-    // allocate memory for activity list (array)
-    //activity *ActivitiesList = (activity *) calloc(10, sizeof(activity));
 
 
-   // Data structures
-   //void deleteNode(struct node **head, int id);
-   //void printList(struct node * head);
-   //void insertAtEnd(struct node **head, Attendee attendee);
-   //void insertAtBeginning(struct node **head, Attendee attendee);
-    
-    
-     /*  printf("Enter The Attende State:");
-   scanf("%c", &temp -> state );
-   if( temp -> state == 'V'   || temp -> state == 'v' )
-   temp ->numOfCompanion = 0 ;
-   else if( temp -> state == 'R'   || temp -> state == 'r' ){
-   printf("Enter numuer Of Companion:");
-   scanf("%d", &temp -> numOfCompanion );
-   temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
-   int i ;
-   Companion Ctemp ; */
+//struct node *registered_head, *prev, *cur;
+//registered_head = (struct node *) malloc(sizeof(struct node));
+
+
+
+//registered_head->val = registered;
+
+//struct node *singleVisit_head;
+//singleVisit_head = (struct node *) malloc(sizeof(struct node));
+
+// allocate memory for activity list (array)
+//activity *ActivitiesList = (activity *) calloc(10, sizeof(activity));
+
+
+// Data structures
+//void deleteNode(struct node **head, int id);
+//void printList(struct node * head);
+//void insertAtEnd(struct node **head, Attendee attendee);
+//void insertAtBeginning(struct node **head, Attendee attendee);
+
+
+/*  printf("Enter The Attende State:");
+scanf("%c", &temp -> state );
+if( temp -> state == 'V'   || temp -> state == 'v' )
+temp ->numOfCompanion = 0 ;
+else if( temp -> state == 'R'   || temp -> state == 'r' ){
+printf("Enter numuer Of Companion:");
+scanf("%d", &temp -> numOfCompanion );
+temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
+int i ;
+Companion Ctemp ; */
    
