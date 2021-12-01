@@ -49,7 +49,8 @@ typedef struct {
     Date endDate;
     int freePassAge;
     int ageRestriction;
-    Day days[];
+    int nDays;
+    Day *days;
 } Activity;
 
 
@@ -73,7 +74,7 @@ void writeAttendee(char *fileName);
 bool isDateInFuture(char date[]);
 
 void printList();
-
+void getDaysList(Activity *activity, Date firstDate, Date lastDate);
 bool isDateValid(char date[]);
 
 bool isDateFormatValid(char date[]);
@@ -82,7 +83,7 @@ int compareDates(Date date1, Date date2);
 
 void assignDate(Date *date, char stringDate[]);
 
-void getDaysList(Date firstDate, Date lastDate);
+
 
 
 struct Attendee *registered = NULL;
@@ -96,7 +97,7 @@ int main() {
 
     // read file and fill Activity list
     readFile();
-
+    getDaysList(activities, activities->endDate,activities->startDate);
 
     return 0;
 }
@@ -284,37 +285,37 @@ void readFile() {
 //        2021/11/01-2022/04/01
 
         sscanf(tx, "%s", fullDate);
-        //start date (Day)
-        strcpy(startDate_dd, tx);
+        //start date (Year)
+        strcpy(startDate_yy, tx);
 
-        *(startDate_dd + 4) = '\0';
-        sscanf(startDate_dd, "%d", &ac.startDate.dd);
+        *(startDate_yy + 4) = '\0';
+        sscanf(startDate_yy, "%d", &ac.startDate.yy);
 
         //start date (month)
         strcpy(startDate_mm, tx + 5);
         *(startDate_mm + 2) = '\0';
         sscanf(startDate_mm, "%d", &ac.startDate.mm);
 
-        //start date (year)
-        strcpy(startDate_yy, tx + 8);
-        *(startDate_yy + 2) = '\0';
-        sscanf(startDate_yy, "%d", &ac.startDate.yy);
+        //start date (Day)
+        strcpy(startDate_dd, tx + 8);
+        *(startDate_dd + 2) = '\0';
+        sscanf(startDate_dd, "%d", &ac.startDate.dd);
 
 
-        //end date (Day)
-        strcpy(endDate_dd, tx + 11);
-        *(endDate_dd + 4) = '\0';
-        sscanf(endDate_dd, "%d", &ac.endDate.dd);
+        //end date (Year)
+        strcpy(endDate_yy, tx + 11);
+        *(endDate_yy + 4) = '\0';
+        sscanf(endDate_yy, "%d", &ac.endDate.yy);
 
         //end date (month)
         strcpy(endDate_mm, tx + 16);
         *(endDate_mm + 2) = '\0';
         sscanf(endDate_mm, "%d", &ac.endDate.mm);
 
-        //end date (year)
-        strcpy(endDate_yy, tx + 19);
-        *(endDate_yy + 2) = '\0';
-        sscanf(endDate_yy, "%d", &ac.endDate.yy);
+        //end date (Day)
+        strcpy(endDate_dd, tx + 19);
+        *(endDate_dd + 2) = '\0';
+        sscanf(endDate_dd, "%d", &ac.endDate.dd);
 
 
 
@@ -396,8 +397,21 @@ int maxDaysDependingOnMonth(int month) {
     }
 }
 
-void getDaysList(Date firstDate, Date lastDate) {
-    //Activity *Activity,
+void testDaysList(int nDaysDifference, Day *daysList){
+
+    printf("Testing");
+    int i;
+    for(i=0; i<nDaysDifference; i++) {
+        printf("%d | %d/%d/%d\n ",
+        i+1,
+        (daysList + i)->date.yy,
+        (daysList + i)->date.mm,
+        (daysList + i)->date.dd);
+    }
+
+}
+
+void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
 
     struct tm date1;
     date1.tm_year = firstDate.yy - 1900;
@@ -419,28 +433,44 @@ void getDaysList(Date firstDate, Date lastDate) {
 
     printf("Year: %d\t", date1.tm_year + 1900);
     printf("Month: %d\t", date1.tm_mon + 1);
-    printf("Day: %d\t", date1.tm_mday);
+    printf("Day: %d\n", date1.tm_mday);
     printf("Year: %d\t", date2.tm_year + 1900);
     printf("Month: %d\t", date2.tm_mon + 1);
     printf("Day: %d\t", date2.tm_mday);
 
 
     double daysDifference = difftime(mktime(&date2), mktime(&date1));
-    printf("Date Difference = %d Days", (int) (daysDifference / 60 / 60 / 24));
+    printf("Date Difference = %d Days\n", (int) (daysDifference / 60 / 60 / 24));
+    activity->nDays = (int)daysDifference;
 
     Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
 
     Date currentDate = firstDate;
 
-    while (currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy) {
-        if (currentDate.dd <= maxDaysDependingOnMonth(currentDate.mm)) {
-            currentDate.dd++;
-        } else {
-//            if (currentDate.mm<)
+    int i;
+    for(i=0; i<daysDifference; i++){
+        (daysList+i)->date.yy = currentDate.yy;
+        (daysList+i)->date.mm = currentDate.mm;
+        (daysList+i)->date.dd = currentDate.dd;
+
+        if(currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy){
+            if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)){
+                currentDate.dd++;
+            }else {
+                if(currentDate.mm < 12){
+                    currentDate.mm++;
+                }else {
+                    currentDate.yy++;
+                }
+            }
+
         }
     }
 
+    testDaysList(daysDifference, daysList);
 }
+
+
 
 
 void editActivity() {
