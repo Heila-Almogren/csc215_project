@@ -399,15 +399,15 @@ int maxDaysDependingOnMonth(int month) {
 
 void testDaysList(int nDaysDifference, Day *daysList) {
 
-    printf("Testing");
+    printf("Testing\n");
     int i;
-//    for(i=0; i<nDaysDifference; i++) {
-//        printf("%d | %d/%d/%d\n ",
-//        i+1,
-//        (daysList + i)->date.yy,
-//        (daysList + i)->date.mm,
-//        (daysList + i)->date.dd);
-//    }
+    for (i = 0; i < nDaysDifference; i++) {
+        printf("%d | %d/%d/%d\n ",
+               i + 1,
+               (daysList + i)->date.yy,
+               (daysList + i)->date.mm,
+               (daysList + i)->date.dd);
+    }
 
 }
 
@@ -441,48 +441,45 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
     printf("Day: %d\t", date2.tm_mday);
 
 
-    int daysDifference = (int)(difftime(mktime(&date2), mktime(&date1))) / 60 / 60 / 24;
+    int daysDifference = (int)((int) (difftime(mktime(&date2), mktime(&date1))) / 60 / 60 / 24)+1;
     printf("Date Difference = %d Days\n", daysDifference);
     activity->nDays = (int) daysDifference;
 
-//    Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
+    Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
 
-//    Date currentDate = firstDate;
-//
-//    int i;
-//    for (i = 0; i < daysDifference; i++) {
-//        (daysList + i)->date.yy = currentDate.yy;
-//        (daysList + i)->date.mm = currentDate.mm;
-//        (daysList + i)->date.dd = currentDate.dd;
-//
-//        if (currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy) {
-//            if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)) {
-//                currentDate.dd++;
-//            } else {
-//                if (currentDate.mm < 12) {
-//                    currentDate.mm++;
-//                } else {
-//                    currentDate.yy++;
-//                }
-//            }
-//
-//        }
-//    }
-//
+    Date currentDate = firstDate;
+
+    int i;
+
+
+    // Fill all days except last day
+    for (i = 0; i < daysDifference; i++) {
+        (daysList + i)->date.yy = currentDate.yy;
+        (daysList + i)->date.mm = currentDate.mm;
+        (daysList + i)->date.dd = currentDate.dd;
+
+        if (currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy) {
+            if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)) {
+                currentDate.dd++;
+            } else {
+                currentDate.dd = 1;
+                if (currentDate.mm < 12) {
+                    currentDate.mm++;
+                } else {
+                    currentDate.mm = 1;
+                    currentDate.yy++;
+                }
+            }
+        }
+    }
+
 //    testDaysList(daysDifference, daysList);
 }
 
 
 void editActivity() {
 
-    /*
-     * char name[35];
-    float price;
-    Date startDate;
-    Date endDate;
-    int freePassAge;
-    int ageRestriction;
-     */
+// TODO: prevent decreasing date, only increasing
 
     char activity_name[53];
     bool found = false;
