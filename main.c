@@ -750,12 +750,10 @@ void showMainMenu() {
                 break;
             }
 
-
             case 2: {
                 editRecord();
                 break;
             }
-
 
             case 3: {
                 editRecord();
@@ -809,6 +807,14 @@ void showAttendee() {
 }
 
 void deleteRecord() {
+
+}
+
+void editRecord(){
+
+}
+
+void showAttendeeReport(){
 
 }
 
