@@ -149,8 +149,8 @@
    
    for( j = 0 ; j<10 ; j++){//its better to change 10 with the number of activities
    activity TempPName = *(activities+j) ;
-   if( tempActivityZone.equals( TempPName.name ) ){ //tempActivityZone.equals( TEMPNAME )?? strstr( TempPName.name , tempActivityZone) != NULL 
-   strcpy (temp -> ActivityZone , tempActivityZone) ;
+   if( strstr( TempPName.name , tempActivityZone) != NULL ){ //tempActivityZone.equals( TempPName.name )??
+   strcpy (temp -> ActivityZone , tempActivityZone) ; 
    temp ->activityFee = TempPName.price  ;
    temp ->totalFees = temp -> numOfCompanion > 0 ? ( temp ->activityFee + (temp -> numOfCompanion * temp ->activityFee)) : temp ->activityFee ;
    ActivityFound = true ;
@@ -160,14 +160,15 @@
    printf("Sorry This Activity name dose not match any Activity :( .. Try again ");
    }//end will
    
-   bool enough_amount = true ;
-   while(enough_amount){
+   //bool enough_amount = true ;
+   while(1){
    printf("Enter The Attende Balance:");
    scanf("%f", &temp ->  balance );
    
-   if( (temp ->  balance) < (temp ->totalFees) ){
+   if( (temp ->  balance) < (temp ->totalFees) )
    printf("Sorry you need to recharge your Balance to To complete the reservation .. Try again ");
-   enough_amount = false ;}
+   else
+   break ;
    }
    
    
