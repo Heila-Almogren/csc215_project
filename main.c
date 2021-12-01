@@ -53,7 +53,7 @@
    void addNewAttendee(); //Alanoud KG
    void editRecord();
    
-   void editActivity();
+   void editActivity();//Heila Al-Mogren
    
    void showAttendeeReport();
    
@@ -112,7 +112,7 @@
    int i ;
    
    for ( i = 0 ; i<temp -> numOfCompanion ; i++){
-   
+    // ctemp = NULL ;
    printf("Enter #%d  Companion ID:" , (i+1) );
    scanf("%d", &Ctemp.id );
    
@@ -130,12 +130,47 @@
    
    }//end if val.state == 'R'
    
+   
    printf("Enter the day of your Reservation ");
    scanf("%d", temp -> date ->dd );
    printf("Enter the month of your Reservation ");
    scanf("%d", temp -> date ->mm );
    printf("Enter the year of your Reservation ");
    scanf("%d", temp -> date ->yy );
+   
+   char tempActivityZone[35] ;
+   bool ActivityFound = false ;
+   
+   int j ;
+   
+   while( ! ActivityFound ){
+   printf("Enter The ActivityZone:");
+   scanf("%s", tempActivityZone );
+   
+   for( j = 0 ; j<10 ; j++){//its better to change 10 with the number of activities
+   activity TempPName = *(activities+j) ;
+   if( tempActivityZone.equals( TempPName.name ) ){ //tempActivityZone.equals( TEMPNAME )?? strstr( TempPName.name , tempActivityZone) != NULL 
+   strcpy (temp -> ActivityZone , tempActivityZone) ;
+   temp ->activityFee = TempPName.price  ;
+   temp ->totalFees = temp -> numOfCompanion > 0 ? ( temp ->activityFee + (temp -> numOfCompanion * temp ->activityFee)) : temp ->activityFee ;
+   ActivityFound = true ;
+   break ;
+   } }
+   if( ! ActivityFound )
+   printf("Sorry This Activity name dose not match any Activity :( .. Try again ");
+   }//end will
+   
+   bool enough_amount = true ;
+   while(enough_amount){
+   printf("Enter The Attende Balance:");
+   scanf("%f", &temp ->  balance );
+   
+   if( (temp ->  balance) < (temp ->totalFees) ){
+   printf("Sorry you need to recharge your Balance to To complete the reservation .. Try again ");
+   enough_amount = false ;}
+   }
+   
+   
    
    
    if( temp -> numOfCompanion > 0 ){ //add the record to the registered linked list
@@ -166,18 +201,15 @@
 
    void readFile() {
 
-
-
        int nActivities = 0;
 
        FILE *fp;
-       fp = fopen("../Activities.txt", "r");
+       fp = fopen("Activities.txt", "r");
 
        if (fp == NULL){
-           printf("Can’t open %s\n","Activities.txt" );
+           printf("Can not open %s\n","Activities.txt" );
            return;
        }
-
 
        char tx[200];
        char name[35];
@@ -224,10 +256,10 @@
 
            // Get date
            eof = fgets(tx, 32, fp);
-           printf("Date: %s\n", tx);
+           //printf("Date: %s\n", tx);
            sscanf(tx, "%s", fullDate);
-           printf("Full date is is %s\n", fullDate);
-//        2021/11/01-2022/04/01
+           //printf("Full date is is %s\n", fullDate);
+           //2021/11/01-2022/04/01
 
            sscanf(tx, "%s", fullDate);
            //start date (day)
@@ -263,12 +295,9 @@
            sscanf(endDate_yy, "%d", &ac.endDate.yy);
 
 
-
-
-
            // ignore the <
            eof = fgets(tx, 2, fp);
-           printf("Ignored sign: %s\n", tx);
+           //printf("Ignored sign: %s\n", tx);
 
            if (strcmp(tx, "-") == 0) {
                freePassAge = -1;
@@ -276,13 +305,13 @@
            } else {
                // Get FREEPASS
                eof = fgets(tx, 19, fp);
-               printf("Free pass: %s\n", tx);
+               //printf("Free pass: %s\n", tx);
                sscanf(tx, "%d", &freePassAge);
            }
 
            // ignore the > or
            eof = fgets(tx, 2, fp);
-           printf("Ignored sign: %s\n", tx);
+           //printf("Ignored sign: %s\n", tx);
 
            if (strcmp(tx, "-") == 0) {
                ageRestriction = -1;
@@ -290,7 +319,7 @@
            } else {
                // Get minimum age
                eof = fgets(tx, 20, fp);
-               printf("Min Age: %s\n", tx);
+               //printf("Min Age: %s\n", tx);
                sscanf(tx, "%d", &ageRestriction);
            }
 
