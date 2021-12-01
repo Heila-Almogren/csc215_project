@@ -74,7 +74,9 @@ void writeAttendee(char *fileName);
 bool isDateInFuture(char date[]);
 
 void printList();
+
 void getDaysList(Activity *activity, Date firstDate, Date lastDate);
+
 bool isDateValid(char date[]);
 
 bool isDateFormatValid(char date[]);
@@ -82,8 +84,6 @@ bool isDateFormatValid(char date[]);
 int compareDates(Date date1, Date date2);
 
 void assignDate(Date *date, char stringDate[]);
-
-
 
 
 struct Attendee *registered = NULL;
@@ -97,7 +97,7 @@ int main() {
 
     // read file and fill Activity list
     readFile();
-    getDaysList(activities, activities->endDate,activities->startDate);
+    getDaysList(activities, activities->startDate, activities->endDate);
 
     return 0;
 }
@@ -397,17 +397,17 @@ int maxDaysDependingOnMonth(int month) {
     }
 }
 
-void testDaysList(int nDaysDifference, Day *daysList){
+void testDaysList(int nDaysDifference, Day *daysList) {
 
     printf("Testing");
     int i;
-    for(i=0; i<nDaysDifference; i++) {
-        printf("%d | %d/%d/%d\n ",
-        i+1,
-        (daysList + i)->date.yy,
-        (daysList + i)->date.mm,
-        (daysList + i)->date.dd);
-    }
+//    for(i=0; i<nDaysDifference; i++) {
+//        printf("%d | %d/%d/%d\n ",
+//        i+1,
+//        (daysList + i)->date.yy,
+//        (daysList + i)->date.mm,
+//        (daysList + i)->date.dd);
+//    }
 
 }
 
@@ -419,6 +419,7 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
     date1.tm_mday = firstDate.dd;
     date1.tm_hour = 0;
     date1.tm_min = 0;
+    date1.tm_sec = 0;
     // Heila: I used this to solve this problem https://stackoverflow.com/questions/26788470/difftime-returns-strange-value-on-particular-date
     date1.tm_isdst = -1;
 
@@ -428,6 +429,7 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
     date2.tm_mday = lastDate.dd;
     date2.tm_hour = 0;
     date2.tm_min = 0;
+    date2.tm_sec = 0;
     date2.tm_isdst = -1;
 
 
@@ -439,38 +441,36 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
     printf("Day: %d\t", date2.tm_mday);
 
 
-    double daysDifference = difftime(mktime(&date2), mktime(&date1));
-    printf("Date Difference = %d Days\n", (int) (daysDifference / 60 / 60 / 24));
-    activity->nDays = (int)daysDifference;
+    int daysDifference = (int)(difftime(mktime(&date2), mktime(&date1))) / 60 / 60 / 24;
+    printf("Date Difference = %d Days\n", daysDifference);
+    activity->nDays = (int) daysDifference;
 
-    Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
+//    Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
 
-    Date currentDate = firstDate;
-
-    int i;
-    for(i=0; i<daysDifference; i++){
-        (daysList+i)->date.yy = currentDate.yy;
-        (daysList+i)->date.mm = currentDate.mm;
-        (daysList+i)->date.dd = currentDate.dd;
-
-        if(currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy){
-            if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)){
-                currentDate.dd++;
-            }else {
-                if(currentDate.mm < 12){
-                    currentDate.mm++;
-                }else {
-                    currentDate.yy++;
-                }
-            }
-
-        }
-    }
-
-    testDaysList(daysDifference, daysList);
+//    Date currentDate = firstDate;
+//
+//    int i;
+//    for (i = 0; i < daysDifference; i++) {
+//        (daysList + i)->date.yy = currentDate.yy;
+//        (daysList + i)->date.mm = currentDate.mm;
+//        (daysList + i)->date.dd = currentDate.dd;
+//
+//        if (currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy) {
+//            if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)) {
+//                currentDate.dd++;
+//            } else {
+//                if (currentDate.mm < 12) {
+//                    currentDate.mm++;
+//                } else {
+//                    currentDate.yy++;
+//                }
+//            }
+//
+//        }
+//    }
+//
+//    testDaysList(daysDifference, daysList);
 }
-
-
 
 
 void editActivity() {
@@ -840,11 +840,11 @@ void deleteRecord() {
 
 }
 
-void editRecord(){
+void editRecord() {
 
 }
 
-void showAttendeeReport(){
+void showAttendeeReport() {
 
 }
 
