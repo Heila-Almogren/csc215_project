@@ -75,7 +75,7 @@ bool isDateInFuture(char date[]);
 
 void printList();
 
-void setDaysList(Activity *activity);
+void setDaysList(Day *daysList, Activity *activity);
 
 bool isDateValid(char date[]);
 
@@ -94,12 +94,15 @@ struct Attendee *singleVisit = NULL;
 struct Attendee *registered_head, *singleVisit_head, *registered_cur, *singleVisit_cur;
 Activity *activities = NULL;
 
+Day *daysList = NULL;
 
 int main() {
 
 
     // read file and fill Activity list
     readFile();
+    editActivity();
+
 //    getDaysList(activities+1, (activities+1)->startDate, (activities+1)->endDate);
 
     return 0;
@@ -191,7 +194,7 @@ void addNewAttendee() {
         scanf("%f", &temp->balance);
 
         if ((temp->balance) < (temp->totalFees))
-            printf("Sorry you need to recharge your Balance to To complete the reservation .. Try again ");
+            printf("Sorry you need to recharge your Balance to To complete the reservation .. Try again");
         else
             break;
     }
@@ -357,11 +360,11 @@ void readFile() {
 
         ac.freePassAge = freePassAge;
         ac.ageRestriction = ageRestriction;
-        setDaysList(&ac);
+        setDaysList(NULL, &ac);
 
 //        printf("\nTesting::\n");
 //        printf("\nn days: %d || first date is %d/%d/%d\n", ac.nDays, ac.days->date.dd, ac.days->date.mm, ac.days->date.yy);
-        testDaysList(ac.nDays,ac.days);
+        testDaysList(ac.nDays, ac.days);
 
         *(activities + nActivities) = ac;
         nActivities++;
@@ -418,7 +421,7 @@ void testDaysList(int nDaysDifference, Day *daysList) {
 
 }
 
-void setDaysList(Activity *activity) {
+void setDaysList(Day *daysList, Activity *activity) {
 
     struct tm date1;
     date1.tm_year = activity->startDate.yy - 1900;
@@ -452,7 +455,7 @@ void setDaysList(Activity *activity) {
     printf("Date Difference = %d Days\n", daysDifference);
     activity->nDays = (int) daysDifference;
 
-    Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
+    daysList = (Day *) realloc(daysList, daysDifference * sizeof(Day));
 
     Date currentDate = activity->startDate;
 
@@ -465,7 +468,8 @@ void setDaysList(Activity *activity) {
         (daysList + i)->date.mm = currentDate.mm;
         (daysList + i)->date.dd = currentDate.dd;
 
-        if (currentDate.dd != activity->endDate.dd || currentDate.mm != activity->endDate.mm || currentDate.yy != activity->endDate.yy) {
+        if (currentDate.dd != activity->endDate.dd || currentDate.mm != activity->endDate.mm ||
+            currentDate.yy != activity->endDate.yy) {
             if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)) {
                 currentDate.dd++;
             } else {
@@ -541,12 +545,9 @@ void editActivity() {
                                 valid_date = false;
                                 if (!isDateFormatValid(new_startDate)) {
                                     printf("Date format is invalid, please re-enter the date:\n> ");
-                                } else {
-                                    if (!isDateInFuture(new_startDate)) {
-                                        printf("Date is in the past, please re-enter the date:\n> ");
-                                    }
                                 }
                             }
+
                         } while (!valid_date);
 
                         assignDate(&(activities[i].startDate), new_startDate);
@@ -568,24 +569,30 @@ void editActivity() {
                                 valid_date = false;
                                 if (!isDateFormatValid(new_endDate)) {
                                     printf("Date format is invalid, please re-enter the date:\n> ");
-                                } else {
-                                    if (!isDateInFuture(new_endDate)) {
-                                        printf("Date is in the past, please re-enter the date:\n> ");
-                                    }
                                 }
                             } else {
                                 Date dateToCompare;
                                 assignDate(&(dateToCompare), new_endDate);
-                                if (compareDates(activities[i].startDate, dateToCompare) < 0) {
+                                if (compareDates(activities[i].endDate, dateToCompare) > 0) {
                                     valid_date = false;
-                                    printf("End date is before start date, please re-enter the date:\n> ");
+                                    printf("You can only extend the event period. Please enter another date:\n >");
                                 }
                             }
                         } while (!valid_date);
 
+
                         assignDate(&(activities[i].endDate), new_endDate);
-                        printf("result: %d/%d/%d", activities[i].endDate.yy, activities[i].endDate.mm,
-                               activities[i].endDate.dd);
+//                        printf("result: %d/%d/%d", activities[i].endDate.yy, activities[i].endDate.mm,
+//                               activities[i].endDate.dd);
+
+
+                        printf("\nBefore: (%d Days)\n", activities[i].nDays);
+                        testDaysList(activities[i].nDays, activities[i].days);
+                        setDaysList(activities[i].days, &activities[i]);
+                        printf("\nAfter: (%d Days)\n", activities[i].nDays);
+                        testDaysList(activities[i].nDays, activities[i].days);
+
+
                         printf("Done! ✨");
 
                     };
@@ -623,7 +630,7 @@ void editActivity() {
 }
 
 bool isDateValid(char date[]) {
-    if (isDateFormatValid(date) && isDateInFuture(date)) {
+    if (isDateFormatValid(date)) {
         return true;
     }
     return false;
@@ -844,8 +851,74 @@ void showAttendee() {
 }
 
 void deleteRecord() {
+    char ch ;
+    int ID;
+    char Aname[35];
 
-}
+    registered_cur = (registered_head)->next;
+    struct Attendee *registered_prev = registered_head;
+
+    singleVisit_cur = (singleVisit_cur)->next;
+    struct Attendee *singleVisit_prev = singleVisit_head;
+    printf("Enter Attendee id : " ) ;
+    scanf("%d" , &ID);
+    //to display the names of the activites
+    while( registered_cur != NULL  ){
+        if( registered_cur->id == ID){
+            printf("Activity name : %s \n" , registered_cur->ActivityZone );
+        }}//while
+    while( singleVisit_cur != NULL  ){
+        if( singleVisit_cur->id == ID){
+            printf("Activity name : %s \n" , singleVisit_cur->ActivityZone );
+        }}//while
+    printf("to delete all activities enter 'A' , to delete single activity enter 'S'");
+    getchar();
+    scanf("%c" , &ch);
+    if(ch == 'A' || ch == 'a' ){
+
+        while(  registered_cur != NULL  ){
+            if(  registered_cur->id == ID ){
+                registered_prev->next = registered_cur->next;
+            }//if
+            registered_prev = registered_cur;
+            registered_cur = registered_cur->next;
+        }//while
+
+        while(  singleVisit_cur != NULL  ){
+            if(  singleVisit_cur->id == ID ){
+                singleVisit_prev->next = singleVisit_cur->next;
+            }//if
+            singleVisit_prev = singleVisit_cur;
+            singleVisit_cur = singleVisit_cur->next;
+        }//while
+
+    }//if a
+
+    if(ch == 'S' || ch == 's' ){
+
+// the user write the name of the activity that he want to delete
+        printf("Enter the name of the Activity you want to delete \n");
+        gets(Aname);
+        // serch by id and activity name to delete  single activite
+        while(  registered_cur != NULL  ){
+            if(  registered_cur->id == ID && registered_cur->ActivityZone == Aname ){
+                registered_prev->next = registered_cur->next;
+            }
+            registered_prev = registered_cur;
+            registered_cur = registered_cur->next;
+        }//while
+
+        while(  singleVisit_cur != NULL &&  singleVisit_cur->ActivityZone == Aname ){
+            if(  singleVisit_cur->id == ID ){
+                singleVisit_prev->next = singleVisit_cur->next;
+            }
+            singleVisit_prev = singleVisit_cur;
+            singleVisit_cur = singleVisit_cur->next;
+        }//ehile
+
+
+    }//if s
+}//deleterecord
 
 void editRecord() {
 
