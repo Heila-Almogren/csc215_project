@@ -45,12 +45,12 @@ struct Attendee {
 typedef struct {
     char name[35];
     float price;
-    Date startDate;
-    Date endDate;
-    int freePassAge;
-    int ageRestriction;
-    int nDays;
-    Day *days;
+    Date startDate;  // 21/11/2021
+    Date endDate;   // 24/11/2021
+    int freePassAge;    // -1 if no pass age
+    int ageRestriction; // -1 if no restriction
+    int nDays;  // 4 (days)
+    Day *days; // { { "21/11/2021", 25} , { "22/11/2021", 7}, { "23/11/2021", 4}, { "24/11/2021", 19} }
 } Activity;
 
 
@@ -243,8 +243,7 @@ void readFile() {
     char tx[200];
     char name[35];
     double price = 0;
-//    Date startDate;
-//    Date endDate;
+
     int freePassAge = 0;
     int ageRestriction = 0;
     char fullDate[50];
@@ -263,31 +262,6 @@ void readFile() {
     // Skip first two lines
     eof = fgets(tx, 200, fp);
     eof = fgets(tx, 200, fp);
-
-    /* ************ */
-//int i;
-//    for( i = 0 ; i < 10 ; i++){ // read 10 Activity from file
-//
-//        struct Activity temp ;
-//        int k ;
-//// read name
-////this code
-////for( k=0;k<35;k++)
-////temp.name[k] = getc(ff);
-////temp.name[k] = '\0' ;
-//
-//// or
-//        fread( temp.name , sizeof(char), 32, ff ) ;
-//        *(temp.name + 32) = '\0';
-////---------------------
-//        fscanf(ff, "%f %s %s %s", &temp.price , temp.date , temp.freeAge , temp.restrictAge);
-//
-//        *(activities+i) = temp ;
-//    }//if
-//
-
-    /* ************** */
-
 
     while (eof) {
 
