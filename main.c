@@ -75,7 +75,7 @@ bool isDateInFuture(char date[]);
 
 void printList();
 
-void getDaysList(Activity *activity, Date firstDate, Date lastDate);
+void setDaysList(Activity *activity);
 
 bool isDateValid(char date[]);
 
@@ -85,6 +85,9 @@ int compareDates(Date date1, Date date2);
 
 void assignDate(Date *date, char stringDate[]);
 
+int getnDays(Day *DaysList);
+
+void testDaysList(int nDaysDifference, Day *daysList);
 
 struct Attendee *registered = NULL;
 struct Attendee *singleVisit = NULL;
@@ -97,7 +100,7 @@ int main() {
 
     // read file and fill Activity list
     readFile();
-    getDaysList(activities, activities->startDate, activities->endDate);
+//    getDaysList(activities+1, (activities+1)->startDate, (activities+1)->endDate);
 
     return 0;
 }
@@ -279,9 +282,9 @@ void readFile() {
 
         // Get date
         eof = fgets(tx, 32, fp);
-        printf("Date: %s\n", tx);
+//        printf("Date: %s\n", tx);
         sscanf(tx, "%s", fullDate);
-        printf("Full date is is %s\n", fullDate);
+//        printf("Full date is is %s\n", fullDate);
 //        2021/11/01-2022/04/01
 
         sscanf(tx, "%s", fullDate);
@@ -323,7 +326,7 @@ void readFile() {
 
         // ignore the <
         eof = fgets(tx, 2, fp);
-        printf("Ignored sign: %s\n", tx);
+//        printf("Ignored sign: %s\n", tx);
 
         if (strcmp(tx, "-") == 0) {
             freePassAge = -1;
@@ -331,13 +334,13 @@ void readFile() {
         } else {
             // Get FREEPASS
             eof = fgets(tx, 19, fp);
-            printf("Free pass: %s\n", tx);
+//            printf("Free pass: %s\n", tx);
             sscanf(tx, "%d", &freePassAge);
         }
 
         // ignore the > or
         eof = fgets(tx, 2, fp);
-        printf("Ignored sign: %s\n", tx);
+//        printf("Ignored sign: %s\n", tx);
 
         if (strcmp(tx, "-") == 0) {
             ageRestriction = -1;
@@ -345,7 +348,7 @@ void readFile() {
         } else {
             // Get minimum age
             eof = fgets(tx, 20, fp);
-            printf("Min Age: %s\n", tx);
+//            printf("Min Age: %s\n", tx);
             sscanf(tx, "%d", &ageRestriction);
         }
 
@@ -354,11 +357,16 @@ void readFile() {
 
         ac.freePassAge = freePassAge;
         ac.ageRestriction = ageRestriction;
+        setDaysList(&ac);
 
+//        printf("\nTesting::\n");
+//        printf("\nn days: %d || first date is %d/%d/%d\n", ac.nDays, ac.days->date.dd, ac.days->date.mm, ac.days->date.yy);
+        testDaysList(ac.nDays,ac.days);
 
         *(activities + nActivities) = ac;
         nActivities++;
     };
+
 
     fclose(fp);
 
@@ -399,7 +407,6 @@ int maxDaysDependingOnMonth(int month) {
 
 void testDaysList(int nDaysDifference, Day *daysList) {
 
-    printf("Testing\n");
     int i;
     for (i = 0; i < nDaysDifference; i++) {
         printf("%d | %d/%d/%d\n ",
@@ -411,12 +418,12 @@ void testDaysList(int nDaysDifference, Day *daysList) {
 
 }
 
-void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
+void setDaysList(Activity *activity) {
 
     struct tm date1;
-    date1.tm_year = firstDate.yy - 1900;
-    date1.tm_mon = firstDate.mm - 1;
-    date1.tm_mday = firstDate.dd;
+    date1.tm_year = activity->startDate.yy - 1900;
+    date1.tm_mon = activity->startDate.mm - 1;
+    date1.tm_mday = activity->startDate.dd;
     date1.tm_hour = 0;
     date1.tm_min = 0;
     date1.tm_sec = 0;
@@ -424,30 +431,30 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
     date1.tm_isdst = -1;
 
     struct tm date2;
-    date2.tm_year = lastDate.yy - 1900;
-    date2.tm_mon = lastDate.mm - 1;
-    date2.tm_mday = lastDate.dd;
+    date2.tm_year = activity->endDate.yy - 1900;
+    date2.tm_mon = activity->endDate.mm - 1;
+    date2.tm_mday = activity->endDate.dd;
     date2.tm_hour = 0;
     date2.tm_min = 0;
     date2.tm_sec = 0;
     date2.tm_isdst = -1;
 
 
-    printf("Year: %d\t", date1.tm_year + 1900);
-    printf("Month: %d\t", date1.tm_mon + 1);
-    printf("Day: %d\n", date1.tm_mday);
-    printf("Year: %d\t", date2.tm_year + 1900);
-    printf("Month: %d\t", date2.tm_mon + 1);
-    printf("Day: %d\t", date2.tm_mday);
+//    printf("Year: %d\t", date1.tm_year + 1900);
+//    printf("Month: %d\t", date1.tm_mon + 1);
+//    printf("Day: %d\n", date1.tm_mday);
+//    printf("Year: %d\t", date2.tm_year + 1900);
+//    printf("Month: %d\t", date2.tm_mon + 1);
+//    printf("Day: %d\t", date2.tm_mday);
 
 
-    int daysDifference = (int)((int) (difftime(mktime(&date2), mktime(&date1))) / 60 / 60 / 24)+1;
+    int daysDifference = (int) ((int) (difftime(mktime(&date2), mktime(&date1))) / 60 / 60 / 24) + 1;
     printf("Date Difference = %d Days\n", daysDifference);
     activity->nDays = (int) daysDifference;
 
     Day *daysList = (Day *) calloc(daysDifference, sizeof(Day));
 
-    Date currentDate = firstDate;
+    Date currentDate = activity->startDate;
 
     int i;
 
@@ -458,7 +465,7 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
         (daysList + i)->date.mm = currentDate.mm;
         (daysList + i)->date.dd = currentDate.dd;
 
-        if (currentDate.dd != lastDate.dd || currentDate.mm != lastDate.mm || currentDate.yy != lastDate.yy) {
+        if (currentDate.dd != activity->endDate.dd || currentDate.mm != activity->endDate.mm || currentDate.yy != activity->endDate.yy) {
             if (currentDate.dd < maxDaysDependingOnMonth(currentDate.mm)) {
                 currentDate.dd++;
             } else {
@@ -473,7 +480,10 @@ void getDaysList(Activity *activity, Date firstDate, Date lastDate) {
         }
     }
 
-//    testDaysList(daysDifference, daysList);
+//    return daysList;
+    activity->days = daysList;
+//    activity->nDays = daysDifference;
+//    testDaysList(daysDifference, activity->days);
 }
 
 
