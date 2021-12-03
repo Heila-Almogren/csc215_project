@@ -493,7 +493,7 @@ void setDaysList(Day *daysList, Activity *activity) {
 
 void editActivity() {
 
-// TODO: prevent decreasing date, only increasing
+
 
     char activity_name[53];
     bool found = false;
@@ -505,27 +505,27 @@ void editActivity() {
         if (strcmp(activities[i].name, activity_name) == 0) {
             found = true;
             printf("Activity found!\nWhat Do you to edit:\n");
-            printf("1. Activity Name\n");
-            printf("2. Activity Price\n");
-            printf("3. Activity Start Date\n");
-            printf("4. Activity End Date\n");
-            printf("5. Activity Free Pass Age\n");
-            printf("6. Activity Age Restriction\n> ");
+//            printf("1. Activity Name\n");
+            printf("1. Activity Price\n");
+//            printf("3. Activity Start Date\n");
+            printf("2. Activity End Date\n");
+//            printf("5. Activity Free Pass Age\n");
+//            printf("6. Activity Age Restriction\n> ");
             int option;
             bool valid_option;
             do {
                 valid_option = true;
                 scanf("%d", &option);
                 switch (option) {
+//                    case 1: {
+//                        char new_name[30];
+//                        printf("Enter the new name:\n> ");
+//                        scanf(" %[^\n]s", new_name);
+//                        strcpy(activities[i].name, new_name);
+//                        printf("Done! ✨");
+//                    };
+//                        break;
                     case 1: {
-                        char new_name[30];
-                        printf("Enter the new name:\n> ");
-                        scanf(" %[^\n]s", new_name);
-                        strcpy(activities[i].name, new_name);
-                        printf("Done! ✨");
-                    };
-                        break;
-                    case 2: {
                         float new_price;
                         printf("Enter the new price:\n> ");
                         scanf(" %f", &new_price);
@@ -533,30 +533,30 @@ void editActivity() {
                         printf("Done! ✨");
                     };
                         break;
-                    case 3: {
-                        bool valid_date = true;
-                        printf("Enter the new start date (in the format yyyy/mm/dd):\n> ");
-                        char new_startDate[30];
-                        do {
-                            valid_date = true;
-                            scanf(" %[^\n]s", new_startDate);
-
-                            if (!isDateValid(new_startDate)) {
-                                valid_date = false;
-                                if (!isDateFormatValid(new_startDate)) {
-                                    printf("Date format is invalid, please re-enter the date:\n> ");
-                                }
-                            }
-
-                        } while (!valid_date);
-
-                        assignDate(&(activities[i].startDate), new_startDate);
-                        printf("result: %d/%d/%d", activities[i].startDate.yy, activities[i].startDate.mm,
-                               activities[i].startDate.dd);
-                        printf("Done! ✨");
-                    };
-                        break;
-                    case 4: {
+//                    case 3: {
+//                        bool valid_date = true;
+//                        printf("Enter the new start date (in the format yyyy/mm/dd):\n> ");
+//                        char new_startDate[30];
+//                        do {
+//                            valid_date = true;
+//                            scanf(" %[^\n]s", new_startDate);
+//
+//                            if (!isDateValid(new_startDate)) {
+//                                valid_date = false;
+//                                if (!isDateFormatValid(new_startDate)) {
+//                                    printf("Date format is invalid, please re-enter the date:\n> ");
+//                                }
+//                            }
+//
+//                        } while (!valid_date);
+//
+//                        assignDate(&(activities[i].startDate), new_startDate);
+//                        printf("result: %d/%d/%d", activities[i].startDate.yy, activities[i].startDate.mm,
+//                               activities[i].startDate.dd);
+//                        printf("Done! ✨");
+//                    };
+//                        break;
+                    case 2: {
 
                         bool valid_date = true;
                         printf("Enter the new end date (in the format yyyy/mm/dd):\n> ");
@@ -597,22 +597,22 @@ void editActivity() {
 
                     };
                         break;
-                    case 5: {
-                        int new_freePassAge;
-                        printf("Enter the new free pass age:\n> ");
-                        scanf(" %d", &new_freePassAge);
-                        activities[i].freePassAge = new_freePassAge;
-                        printf("Done! ✨");
-                    };
-                        break;
-                    case 6: {
-                        int new_ageRestriction;
-                        printf("Enter the new age restriction:\n> ");
-                        scanf(" %d", &new_ageRestriction);
-                        activities[i].ageRestriction = new_ageRestriction;
-                        printf("Done! ✨");
-                    };
-                        break;
+//                    case 5: {
+//                        int new_freePassAge;
+//                        printf("Enter the new free pass age:\n> ");
+//                        scanf(" %d", &new_freePassAge);
+//                        activities[i].freePassAge = new_freePassAge;
+//                        printf("Done! ✨");
+//                    };
+//                        break;
+//                    case 6: {
+//                        int new_ageRestriction;
+//                        printf("Enter the new age restriction:\n> ");
+//                        scanf(" %d", &new_ageRestriction);
+//                        activities[i].ageRestriction = new_ageRestriction;
+//                        printf("Done! ✨");
+//                    };
+//                        break;
                     default: {
                         valid_option = false;
                         printf("Invalid option, please retry:\n> ");
