@@ -264,6 +264,31 @@ void readFile() {
     eof = fgets(tx, 200, fp);
     eof = fgets(tx, 200, fp);
 
+    /* ************ */
+//int i;
+//    for( i = 0 ; i < 10 ; i++){ // read 10 Activity from file
+//
+//        struct Activity temp ;
+//        int k ;
+//// read name
+////this code
+////for( k=0;k<35;k++)
+////temp.name[k] = getc(ff);
+////temp.name[k] = '\0' ;
+//
+//// or
+//        fread( temp.name , sizeof(char), 32, ff ) ;
+//        *(temp.name + 32) = '\0';
+////---------------------
+//        fscanf(ff, "%f %s %s %s", &temp.price , temp.date , temp.freeAge , temp.restrictAge);
+//
+//        *(activities+i) = temp ;
+//    }//if
+//
+
+    /* ************** */
+
+
     while (eof) {
 
         activities = realloc(activities, (nActivities + 1) * sizeof(Activity));
@@ -376,21 +401,21 @@ void readFile() {
     test_readFile(activities);
 }
 
-void test_readFile(Activity activities[]) {
+void test_readFile(Activity *activities) {
     int i;
     for (i = 0; i < 10; i++) {
         printf("%d | Name: %-32s\t Price: %-18lf\t Date:%d/%d/%d-%d/%d/%d \t freePassAge:%d\t ageRestriction: %d\n",
                i + 1,
-               activities[i].name,
-               activities[i].price,
-               activities[i].startDate.dd,
-               activities[i].startDate.mm,
-               activities[i].startDate.yy,
-               activities[i].endDate.dd,
-               activities[i].endDate.mm,
-               activities[i].endDate.yy,
-               activities[i].freePassAge,
-               activities[i].ageRestriction
+               (activities+i)->name,
+               (activities+i)->price,
+               (activities+i)->startDate.dd,
+               (activities+i)->startDate.mm,
+               (activities+i)->startDate.yy,
+               (activities+i)->endDate.dd,
+               (activities+i)->endDate.mm,
+               (activities+i)->endDate.yy,
+               (activities+i)->freePassAge,
+               (activities+i)->ageRestriction
         );
 
     }
@@ -502,13 +527,13 @@ void editActivity() {
     int i;
     for (i = 0; i < 10; i++) {
 //        printf("%s VS %s\n", activities[i].name, activity_name);
-        if (strcmp(activities[i].name, activity_name) == 0) {
+        if (strcmp((activities+i)->name, activity_name) == 0) {
             found = true;
             printf("Activity found!\nWhat Do you to edit:\n");
 //            printf("1. Activity Name\n");
             printf("1. Activity Price\n");
 //            printf("3. Activity Start Date\n");
-            printf("2. Activity End Date\n");
+            printf("2. Activity End Date\n> ");
 //            printf("5. Activity Free Pass Age\n");
 //            printf("6. Activity Age Restriction\n> ");
             int option;
@@ -529,7 +554,7 @@ void editActivity() {
                         float new_price;
                         printf("Enter the new price:\n> ");
                         scanf(" %f", &new_price);
-                        activities[i].price = new_price;
+                        (activities+i)->price = new_price;
                         printf("Done! ✨");
                     };
                         break;
@@ -573,7 +598,7 @@ void editActivity() {
                             } else {
                                 Date dateToCompare;
                                 assignDate(&(dateToCompare), new_endDate);
-                                if (compareDates(activities[i].endDate, dateToCompare) > 0) {
+                                if (compareDates((activities+i)->endDate, dateToCompare) > 0) {
                                     valid_date = false;
                                     printf("You can only extend the event period. Please enter another date:\n >");
                                 }
@@ -581,16 +606,13 @@ void editActivity() {
                         } while (!valid_date);
 
 
-                        assignDate(&(activities[i].endDate), new_endDate);
-//                        printf("result: %d/%d/%d", activities[i].endDate.yy, activities[i].endDate.mm,
-//                               activities[i].endDate.dd);
+                        assignDate(&((activities+i)->endDate), new_endDate);
 
-
-                        printf("\nBefore: (%d Days)\n", activities[i].nDays);
-                        testDaysList(activities[i].nDays, activities[i].days);
-                        setDaysList(activities[i].days, &activities[i]);
-                        printf("\nAfter: (%d Days)\n", activities[i].nDays);
-                        testDaysList(activities[i].nDays, activities[i].days);
+                        printf("\nBefore: (%d Days)\n", (activities+i)->nDays);
+                        testDaysList((activities+i)->nDays, (activities+i)->days);
+                        setDaysList((activities+i)->days, activities+i);
+                        printf("\nAfter: (%d Days)\n", (activities+i)->nDays);
+                        testDaysList((activities+i)->nDays, (activities+i)->days);
 
 
                         printf("Done! ✨");
