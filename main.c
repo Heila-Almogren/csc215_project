@@ -93,7 +93,7 @@ struct Attendee *registered = NULL;
 struct Attendee *singleVisit = NULL;
 struct Attendee *registered_head, *singleVisit_head, *registered_cur, *singleVisit_cur;
 Activity *activities = NULL;
-
+int numRegistered,numSingle;
 Day *daysList = NULL;
 
 int main() {
@@ -128,10 +128,11 @@ void addNewAttendee() {
     scanf("%d", &temp->numOfCompanion);
     if (temp->numOfCompanion = 0) {
         temp->state = 'V';
+        numSingle++;
         temp->listOfCompanion = NULL;
     } else if (temp->numOfCompanion > 0) {
         temp->state = 'R';
-
+        numRegistered++;
         temp->listOfCompanion = (Companion *) calloc(temp->numOfCompanion, sizeof(Companion));
         Companion Ctemp;
         int i;
