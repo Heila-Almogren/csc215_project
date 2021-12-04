@@ -1080,9 +1080,130 @@ void editRecord() {
 
 }
 
-void showAttendeeReport() {
+void showAttendeeReport(){
+   
+   char Aname[35];
+   int NOA = 0 ;//counter for the number of attendees 
+   int i = 0 ;
 
-}
+  printf("total attendees’ numbers for each activity\n");
+  registered_cur = registered_head;
+  singleVisit_cur = singleVisit_head;
+  int TNA;//total number of atndees at activity 
+  while( (activities+i) != NULL ){
+      while(registered_cur->next != NULL){
+      if(strstr((registered_cur->ActivityZone ) , ((activities+i)->name)))
+     TNA++;
+      registered_cur=registered_cur->next;}//while   
+  
+  while(singleVisit_cur->next != NULL)
+  while(singleVisit_cur->next != NULL){
+      if(strstr(singleVisit_cur->ActivityZone  , ((activities+i)->name)))
+     TNA++;
+    singleVisit_cur=singleVisit_cur->next;}//while 
+  
+  
+   printf(" %s has %d Attendee \n" , *(activities+i)->name , TNA  );
+     i++; 
+     }//while 
+     
+ //////////////////other sol //////////////////////////////////
+ 
+ i=0;
+   printf("total attendees’ numbers for each activity\n");
+//first asc the user to enter the name of the activity 
+  printf(" Enter the name of the activitee : \n");
+  scanf("%s", Aname );
+  // then we loop on activities to find the name of the activity
+  //the ad the number of attendes on the activity
+   while( (activities + i) != NULL ){
+ if((activities+i)->name == Aname )
+NOA += (activities+i)->days->attendeeCounter;
+i++;
+}//while 
+   printf(" %s has %d Attendee \n",  Aname , NOA  );
+
+
+  
+     
+     
+//attendees’ numbers for each activity by date 
+  printf("attendees’ numbers for each activity by date\n");
+ Date *t_date ;
+ NOA = 0 ;//counter for the number of attendees 
+ i=0;
+
+//ask the user to inter the day , month and year in the struct of day
+//then ask the user to enter the name of the activitee
+
+printf("Enter date : ");
+ printf("Enter the day :\n ");
+    scanf("%d  ", t_date->dd);
+    printf("Enter the month: \n ");
+    scanf("%d  ", t_date->mm);
+    printf("Enter the year: \n ");
+    scanf("%d  ", t_date->yy);
+    
+    printf("Enter the activitee name  : \n");
+    scanf("%s", Aname );
+//loop on activities to find the name of the activitee and the date
+ while( (activities+i) != NULL ){
+ if((activities+i)->name == Aname && (compareDates((activities+i)->days->date, *t_date) == 0 ))
+NOA = ((activities+i)->days->attendeeCounter);
+i++;
+}//while
+printf("the number of attendees at %s on %d / %d / %d  is %d \n  ", Aname ,t_date->dd  ,t_date->mm ,t_date->yy  , NOA );
+  
+//total attendees’ numbers for each date
+  printf("atotal attendees’ numbers for each date \n");
+//ask the user to inter the day , month and year in the struct of day
+//then we created a loop on activities 
+//to count thr number of attendees on all activities on the giving date  
+//by ading the number on attendees for all activities on the giving date 
+ i=0;
+NOA = 0 ;//counter for the number of attendees 
+  printf("Enter date :  \n  ");
+ printf("Enter the day : \n ");
+    scanf("%d", t_date->dd);
+    printf("Enter the month : \n  ");
+    scanf("%d", t_date->mm);
+    printf("Enter the year : \n ");
+    scanf("%d", t_date->yy);
+while( (activities+i) != NULL ){
+if(compareDates((activities+i)->days->date, *t_date) == 0)
+NOA += (activities+i)->days->attendeeCounter;
+i++;
+}//while 
+printf("number of attendees on this date is %d  \n " , NOA );
+
+
+//total income coming from all activities by dates
+float INC = 0 ; // income
+ i=0;
+
+//ask the user to inter the day , month and year in the struct of day
+//then loop on activities to find activities on the same date
+//then multiplay the price of the activity by the number of attendees to get the income of a singlr activity on that date 
+//then sum the incums of all activities on thet date 
+
+printf("total income coming from all activities by dates \n " );
+
+  printf("Enter date :  \n  ");
+ printf("Enter the day : \n ");
+    scanf("%d", t_date->dd);
+    printf("Enter the month : \n  ");
+    scanf("%d", t_date->mm);
+    printf("Enter the year : \n ");
+    scanf("%d", t_date->yy);
+while( (activities+i) != NULL ){
+if(compareDates((activities+i)->days->date, *t_date) == 0 )
+INC += ((activities+i)->price)*((activities+i)->days->attendeeCounter);
+i++;
+ }//while
+ printf("the total income coming from the activities at %d / %d / %d is %f  \n " ,t_date->dd  ,t_date->mm ,t_date->yy  , INC );
+
+ 
+  } //show attendee report
 
 /* void insertAtBeginning(struct node **head, Attendee attendee) {
      Node *newNode = (Node *) malloc(sizeof(Node));
