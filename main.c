@@ -95,17 +95,18 @@ struct Attendee *registered_head, *singleVisit_head, *registered_cur, *singleVis
 Activity *activities = NULL;
 int numRegistered,numSingle;
 Day *daysList = NULL;
+int nActivities ;
+
 
 int main() {
 
 
     // read file and fill Activity list
     readFile();
-<<<<<<< Updated upstream
     editActivity();
-=======
+
     //editActivity();
->>>>>>> Stashed changes
+
 
 //    getDaysList(activities+1, (activities+1)->startDate, (activities+1)->endDate);
 
@@ -128,17 +129,6 @@ void addNewAttendee() {
     printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
     scanf("%s", temp->address);
 
-<<<<<<< Updated upstream
-    printf("Enter numuer Of Companion:");
-    scanf("%d", &temp->numOfCompanion);
-    if (temp->numOfCompanion = 0) {
-        temp->state = 'V';
-        numSingle++;
-        temp->listOfCompanion = NULL;
-    } else if (temp->numOfCompanion > 0) {
-        temp->state = 'R';
-        numRegistered++;
-=======
   
     bool FoundSameDate = true ;
     while( FoundSameDate  ){
@@ -209,7 +199,6 @@ void addNewAttendee() {
              } else if (temp->numOfCompanion > 0) {
                           temp->state = 'R';
 
->>>>>>> Stashed changes
         temp->listOfCompanion = (Companion *) calloc(temp->numOfCompanion, sizeof(Companion));
         Companion Ctemp;
         int i;
@@ -297,11 +286,11 @@ void addNewAttendee() {
     }
             char *NameOfRegisteredFile = "Registered Attendee.txt"  , *NameOfSingleVisitFile = "Single Visit Attendee.txt" ;
 
-             //if(temp->state)
+             if(temp->state);
              //writeAttendee(NameOfRegisteredFile);
-            // else if(temp->state)
+             else if(temp->state);
             //writeAttendee(NameOfSingleVisitFile);
-      }//end addNewAttendee
+           }//end addNewAttendee
 
 
       void editRecord(){
@@ -351,7 +340,7 @@ void addNewAttendee() {
             scanf("%d",&NumberOfIDS);
             
             if(temp_cur->numOfCompanion == NumberOfIDS )
-            temp_cur->listOfCompanion = NULL ; //or free
+            temp_cur->listOfCompanion = NULL ; //or free ??
             
             
             int size_of_memoryloc =  temp_cur->numOfCompanion;
@@ -441,10 +430,10 @@ void addNewAttendee() {
 
 
 
-void readFile() {
+   void readFile() {
 
 
-    int nActivities = 0;
+    nActivities = 0;
 
     FILE *fp;
     fp = fopen("Activities.txt", "r");
@@ -837,7 +826,6 @@ void editActivity() {
     if (!found) {
         printf("Activity not found, add a new Activity");
     }
-<<<<<<< Updated upstream
 
 }
 
@@ -1230,7 +1218,7 @@ void deleteRecord() {
     registered_cur = (registered_head)->next;
     struct Attendee *registered_prev = registered_head;
 
-    singleVisit_cur = (singleVisit_cur)->next;
+    singleVisit_cur = (singleVisit_head)->next;
     struct Attendee *singleVisit_prev = singleVisit_head;
     printf("Enter Attendee id : " ) ;
     scanf("%d" , &ID);
@@ -1292,11 +1280,6 @@ void deleteRecord() {
     }//if s
 }//deleterecord
 
-void editRecord() {
-
-}
-=======
-   
    }
    
    bool isDateValid(char date[]) {
@@ -1528,7 +1511,7 @@ void editRecord() {
    void showAttendeeReport(){
    
    }
->>>>>>> Stashed changes
+
 
 void showAttendeeReport(){
    
@@ -1540,15 +1523,15 @@ void showAttendeeReport(){
   registered_cur = registered_head;
   singleVisit_cur = singleVisit_head;
   int TNA;//total number of atndees at activity 
-  while( (activities+i) != NULL ){
+  while( *(activities+i) != NULL ){
       while(registered_cur->next != NULL){
-      if(strstr((registered_cur->ActivityZone ) , ((activities+i)->name)))
+      if(strstr((registered_cur->ActivityZone ) , (*(activities+i)->name)))
      TNA++;
       registered_cur=registered_cur->next;}//while   
   
-  while(singleVisit_cur->next != NULL)
+  
   while(singleVisit_cur->next != NULL){
-      if(strstr(singleVisit_cur->ActivityZone  , ((activities+i)->name)))
+      if(strstr( singleVisit_cur->ActivityZone , (*(activities+i)->name) ) )
      TNA++;
     singleVisit_cur=singleVisit_cur->next;}//while 
   
@@ -1566,8 +1549,8 @@ void showAttendeeReport(){
   scanf("%s", Aname );
   // then we loop on activities to find the name of the activity
   //the ad the number of attendes on the activity
-   while( (activities + i) != NULL ){
- if((activities+i)->name == Aname )
+   while( *(activities + i) != NULL ){
+ if(strstr( (*(activities+i)->name) ,Aname ) != NULL )
 NOA += (activities+i)->days->attendeeCounter;
 i++;
 }//while 
@@ -1598,8 +1581,8 @@ printf("Enter date : ");
     scanf("%s", Aname );
 //loop on activities to find the name of the activitee and the date
  while( (activities+i) != NULL ){
- if((activities+i)->name == Aname && (compareDates((activities+i)->days->date, *t_date) == 0 ))
-NOA = ((activities+i)->days->attendeeCounter);
+ if( (*(activities+i)->name ,Aname) != NULL && (compareDates((*(activities+i)->days->date), *t_date) == 0 ))
+NOA = (*(activities+i)->days->attendeeCounter);
 i++;
 }//while
 printf("the number of attendees at %s on %d / %d / %d  is %d \n  ", Aname ,t_date->dd  ,t_date->mm ,t_date->yy  , NOA );
@@ -1611,6 +1594,7 @@ printf("the number of attendees at %s on %d / %d / %d  is %d \n  ", Aname ,t_dat
 //to count thr number of attendees on all activities on the giving date  
 //by ading the number on attendees for all activities on the giving date 
  i=0;
+
 NOA = 0 ;//counter for the number of attendees 
   printf("Enter date :  \n  ");
  printf("Enter the day : \n ");
@@ -1619,9 +1603,9 @@ NOA = 0 ;//counter for the number of attendees
     scanf("%d", t_date->mm);
     printf("Enter the year : \n ");
     scanf("%d", t_date->yy);
-while( (activities+i) != NULL ){
-if(compareDates((activities+i)->days->date, *t_date) == 0)
-NOA += (activities+i)->days->attendeeCounter;
+while( (*(activities+i)) != NULL ){// activities temp = *(activities+i) ;
+if(compareDates((*(activities+i)->days->date), *t_date) == 0)
+NOA += *(activities+i)->*(days+i)->attendeeCounter;
 i++;
 }//while 
 printf("number of attendees on this date is %d  \n " , NOA );
@@ -1744,8 +1728,8 @@ int i ;
 <<<<<<< Updated upstream
 Companion Ctemp ; */
    
-=======
-Companion Ctemp */
+
+
 
 /*  Companion_temp = *(temp_cur->listOfCompanion + k);
               if( Companion_temp.id == Companion_ID ){
@@ -1764,4 +1748,4 @@ Companion Ctemp */
             //if( Companion_temp.id == Companion_ID )  counter_IDS++ ; 
             }//end while to check if we delete all NumberOfIDS
            // temp_cur->listOfCompanion = Temp_listOfCompanion ;*/
->>>>>>> Stashed changes
+
