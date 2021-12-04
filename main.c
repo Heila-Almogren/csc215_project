@@ -844,7 +844,167 @@ void showMainMenu() {
 
 void showAttendee() {
 
+int SANum=0;
+do{
+printf("Enter the corresponding no \n");
+printf("1.Records of attendees in alphabetical order \n");
+printf("2.Records of single visit attendees\n");
+printf("3.Records of registered attendees\n");
+printf("4.Records in particular date\n");
+printf("5.Return to main menu\n");
+scanf("%d",&SANum);
+
+        switch (SANum) {
+            case 1: {
+                //Records of attendees in alphabetical order
+                singleVisit_cur = singleVisit_head; 
+                registered_cur = registered_head;
+                struct Attendee *temp;
+                struct Attendee* allAttendeess=(struct Attendee*)calloc(numRegistered+numSingle,sizeof(struct Attendee));
+                for(int i=0; registered_cur!=NULL;i++){
+                    *(allAttendeess+i)=*registered_cur;
+                    registered_cur=registered_cur->next;
+                }
+
+                for(int i=0; singleVisit_cur!=NULL;i++){
+                    *(allAttendeess+i)=*singleVisit_cur;
+                    singleVisit_cur=singleVisit_cur->next;
+                }
+                
+                for (int i = 0; i <numRegistered+numSingle ; i++)
+                {
+                   for (int j = i+1; j <numRegistered+numSingle ; j++)
+                   {
+                       if(strcmp((allAttendeess+i)->name,(allAttendeess+j)->name)>0){
+                           *temp=*(allAttendeess+i);
+                           *(allAttendeess+i)=*(allAttendeess+j);
+                           *(allAttendeess+j)=*temp;
+
+                       }
+                       
+                   }
+                   
+                }
+                int i=0;
+                while ((allAttendeess+i)->next != NULL){
+                    printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {",(allAttendeess+i)->id,(allAttendeess+i)->name,(allAttendeess+i)->age,(allAttendeess+i)->state, (allAttendeess+i)->address, (allAttendeess+i)->ActivityZone, (allAttendeess+i)->numOfCompanion);
+                    if((allAttendeess+i)->state=='v'){
+                        for(int i=0;i<(allAttendeess+i)->numOfCompanion;i++){
+                        
+                            printf("{%d",((allAttendeess+i)->listOfCompanion+i)->id);
+                            printf("%s",((allAttendeess+i)->listOfCompanion+i)->name);
+                            printf("%d",((allAttendeess+i)->listOfCompanion+i)->age);
+                            printf("%c",((allAttendeess+i)->listOfCompanion+i)->gender);
+                            printf("%s}",((allAttendeess+i)->listOfCompanion+i)->address);
+                        }//for
+                    }//if
+                    else printf("{");
+                        printf("} \t %f \t %f \t %f\n", (allAttendeess+i)->activityFee, (allAttendeess+i)->totalFees, (allAttendeess+i)->balance);
+                        i++;
+                }//while
+
+                
+                free(allAttendeess);
+                break;
+                }//case 1
+            
+
+            case 2: {
+                //"2.Records of single visit attendees
+                singleVisit_cur = singleVisit_head;
+                while (singleVisit_cur->next != NULL){
+                    printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {",singleVisit_cur->id,singleVisit_cur->name,singleVisit_cur->age,singleVisit_cur->state, singleVisit_cur->address,singleVisit_cur->ActivityZone,singleVisit_cur->numOfCompanion);
+                    printf("} \t %f \t %f \t %f\n", singleVisit_cur->activityFee, singleVisit_cur->totalFees,singleVisit_cur->balance);
+  
+                    singleVisit_cur = singleVisit_cur->next;
+                }
+                break;
+            }
+
+            case 3: {
+                //3.Records of registered attendees
+                 registered_cur = registered_head;
+                 struct Attendee temp;
+                while (registered_cur->next != NULL){  
+                    printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {",temp.id,temp.name,temp.age,temp.state, temp.address, temp.ActivityZone, temp.numOfCompanion);
+                        for(int i=0;i<temp.numOfCompanion;i++){
+                            printf("{%d",(temp.listOfCompanion+i)->id);
+                            printf("%s",(temp.listOfCompanion+i)->name);
+                            printf("%d",(temp.listOfCompanion+i)->age);
+                            printf("%c",(temp.listOfCompanion+i)->gender);
+                            printf("%s}",(temp.listOfCompanion+i)->address);}
+                        printf("} \t %.2f \t %.2f \t %.2f\n", temp.activityFee, temp.totalFees, temp.balance);
+                        
+                    registered_cur = registered_cur->next;}
+                break;
+            }
+
+
+            case 4: {
+                /*Records in particular date
+                singleVisit_cur = singleVisit_head; 
+                registered_cur = registered_head;
+                
+                struct Attendee* allAttendeess=(struct Attendee*)calloc(numRegistered+numSingle,sizeof(struct Attendee));
+                for(int i=0; registered_cur!=NULL;i++){
+                    *(allAttendeess+i)=*registered_cur;
+                    registered_cur=registered_cur->next;
+                }
+
+                for(int i=0; singleVisit_cur!=NULL;i++){
+                    *(allAttendeess+i)=*singleVisit_cur;
+                    singleVisit_cur=singleVisit_cur->next;
+                };*/
+
+                Date *tempd;
+                printf("please enter the Year of the paticular date");
+                scanf("%d",&(tempd->yy));
+                printf("please enter the Month of the paticular date");
+                scanf("%d",&(tempd->mm));
+                printf("please enter the Day of the paticular date");
+                scanf("%d",(tempd->yy));
+                
+                while (singleVisit_cur->next != NULL){
+                    if(compareDates(*tempd, *singleVisit_cur->date)==0){
+                    printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {",singleVisit_cur->id,singleVisit_cur->name,singleVisit_cur->age,singleVisit_cur->state, singleVisit_cur->address,singleVisit_cur->ActivityZone,singleVisit_cur->numOfCompanion);
+                    printf("} \t %f \t %f \t %f\n", singleVisit_cur->activityFee, singleVisit_cur->totalFees,singleVisit_cur->balance);
+                    }
+                    singleVisit_cur = singleVisit_cur->next;
+                    
+                }
+                
+                 while (registered_cur->next != NULL){  
+                     if(compareDates(*tempd, *registered_cur->date)==0){
+                    printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {",registered_cur->id,registered_cur->name,registered_cur->age,registered_cur->state, registered_cur->address, registered_cur->ActivityZone,registered_cur->numOfCompanion);
+                        for(int i=0;i<registered_cur->numOfCompanion;i++){
+                            printf("{%d",(registered_cur->listOfCompanion+i)->id);
+                            printf("%s",(registered_cur->listOfCompanion+i)->name);
+                            printf("%d",(registered_cur->listOfCompanion+i)->age);
+                            printf("%c",(registered_cur->listOfCompanion+i)->gender);
+                            printf("%s}",(registered_cur->listOfCompanion+i)->address);}
+                        printf("} \t %.2f \t %.2f \t %.2f\n", registered_cur->activityFee, registered_cur->totalFees, registered_cur->balance);
+                     }
+                    registered_cur = registered_cur->next;}
+
+                break;
+            }
+
+
+            case 5: {
+                
+                break;
+            }
+
+            default: {
+                printf("invalid input, please try again.");
+            }
+
+
+        };
+}while(SANum!=0);
+
 }
+
 
 void deleteRecord() {
     char ch ;
