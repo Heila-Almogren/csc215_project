@@ -26,6 +26,8 @@ typedef struct {
 
 // Attendee struct
 struct Attendee {
+     Date *date;
+    struct Attendee *next;
     int id;
     char name[20];
     int age;
@@ -37,8 +39,7 @@ struct Attendee {
     float totalFees;
     float balance;
     float activityFee;
-    Date *date;
-    struct Attendee *next;
+   
 };
 
 
@@ -105,14 +106,15 @@ int main() {
 
     // read file and fill Activity list
     readFile();
+    showMainMenu();
 //    addNewAttendee();
 //    editActivity();
-    showAttendeeReport();
+   // showAttendeeReport();
     //editActivity();
-    createFiles();
-    struct Attendee at1 = {123, "Heila"};
-    struct Attendee at2 = {321, "Anood"};
-    struct Attendee at3 = {111, "Haila"};
+    //createFiles();
+   // struct Attendee at1 = {123, "Heila"};
+    //struct Attendee at2 = {321, "Anood"};
+    //struct Attendee at3 = {111, "Haila"};
     //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at1);
     //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at2);
     //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at3);
@@ -137,16 +139,18 @@ void addNewAttendee() {
     printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
     scanf("%s", temp->address);
 
-
+    
     bool FoundSameDate = true;
     while (FoundSameDate) {
 
-
-        printf("Enter the day of your Reservation ");
-        scanf("%d", &temp->date->dd);
-        printf("Enter the month of your Reservation ");
+        getchar();
+        printf("Enter the day of your Reservation:");
+        scanf("%d", &temp->date->dd ); 
+        //temp->date->dd = Dtemp.dd ;
+        printf("Enter the month of your Reservation:");
         scanf("%d", &temp->date->mm);
-        printf("Enter the year of your Reservation ");
+        //temp->date->mm = 
+        printf("Enter the year of your Reservation:");
         scanf("%d", &temp->date->yy);
 
         FoundSameDate = false;
@@ -480,7 +484,7 @@ void readFile() {
     nActivities = 0;
 
     FILE *fp;
-    fp = fopen("../Activities.txt", "r");
+    fp = fopen("Activities.txt", "r");
 
     if (fp == NULL) {
         printf("Can not open %s\n", "Activities.txt");
@@ -1070,15 +1074,15 @@ void showMainMenu() {
     int entered = 0;
     do {
 
-        printf("Enter the corresponding no");
-        printf("1.Add new attendee record");
-        printf("2.Search or edit record");
-        printf("3.Edit attendee");
-        printf("4.Edit activity");
-        printf("5.Show report");
-        printf("6.Know the records of attendees");
-        printf("7.Delete the records");
-        printf("8.Exit from the program");
+        printf("Enter the corresponding no\n");
+        printf("1.Add new attendee record\n");
+        printf("2.Search or edit record\n");
+        printf("3.Edit attendee\n");
+        printf("4.Edit activity\n");
+        printf("5.Show report\n");
+        printf("6.Know the records of attendees\n");
+        printf("7.Delete the records\n");
+        printf("8.Exit from the program\n");
 
         scanf("%d", &entered);
         switch (entered) {
@@ -1324,77 +1328,84 @@ void showAttendee() {
 
 
 void deleteRecord() {
-    char ch;
-    int ID;
-    char Aname[35];
+   char ch ;
+   int ID;
+   char Aname[35];
+    
+   registered_cur = (registered_head)->next;
+   struct Attendee *registered_prev = registered_head;
+                 
+   singleVisit_cur = (singleVisit_head)->next;
+   struct Attendee *singleVisit_prev = singleVisit_head;
+                 
+   printf("Enter Attendee id :\n " ) ; 
+   scanf("%d" , &ID); 
 
-    registered_cur = (registered_head)->next;
-    struct Attendee *registered_prev = registered_head;
+//to display the names of the activites  
+   while( registered_cur != NULL  ){ 
+      if( registered_cur->id == ID){
+         printf("Activity name : %s \n" , registered_cur->ActivityZone ); 
+         registered_prev = registered_cur;
+         registered_cur = registered_cur->next;
+      
+      }}//while
 
-    singleVisit_cur = (singleVisit_head)->next;
-    struct Attendee *singleVisit_prev = singleVisit_head;
-    printf("Enter Attendee id : ");
-    scanf("%d", &ID);
-    //to display the names of the activites
-    while (registered_cur != NULL) {
-        if (registered_cur->id == ID) {
-            printf("Activity name : %s \n", registered_cur->ActivityZone);
-        }
-    }//while
-    while (singleVisit_cur != NULL) {
-        if (singleVisit_cur->id == ID) {
-            printf("Activity name : %s \n", singleVisit_cur->ActivityZone);
-        }
-    }//while
-    printf("to delete all activities enter 'A' , to delete single activity enter 'S'");
-    getchar();
-    scanf("%c", &ch);
-    if (ch == 'A' || ch == 'a') {
-
-        while (registered_cur != NULL) {
-            if (registered_cur->id == ID) {
-                registered_prev->next = registered_cur->next;
-            }//if
-            registered_prev = registered_cur;
-            registered_cur = registered_cur->next;
-        }//while
-
-        while (singleVisit_cur != NULL) {
-            if (singleVisit_cur->id == ID) {
-                singleVisit_prev->next = singleVisit_cur->next;
-            }//if
-            singleVisit_prev = singleVisit_cur;
-            singleVisit_cur = singleVisit_cur->next;
-        }//while
-
-    }//if a
-
-    if (ch == 'S' || ch == 's') {
-
-// the user write the name of the activity that he want to delete
-        printf("Enter the name of the Activity you want to delete \n");
-        gets(Aname);
-        // serch by id and activity name to delete  single activite
-        while (registered_cur != NULL) {
-            if (registered_cur->id == ID && registered_cur->ActivityZone == Aname) {
-                registered_prev->next = registered_cur->next;
-            }
-            registered_prev = registered_cur;
-            registered_cur = registered_cur->next;
-        }//while
-
-        while (singleVisit_cur != NULL && singleVisit_cur->ActivityZone == Aname) {
-            if (singleVisit_cur->id == ID) {
-                singleVisit_prev->next = singleVisit_cur->next;
-            }
-            singleVisit_prev = singleVisit_cur;
-            singleVisit_cur = singleVisit_cur->next;
-        }//ehile
+   while( singleVisit_cur != NULL  ){ 
+      if( singleVisit_cur->id == ID){
+         printf("Activity name : %s \n" , singleVisit_cur->ActivityZone ); 
+         singleVisit_prev = singleVisit_cur;
+         singleVisit_cur = singleVisit_cur->next;
+      
+      }}//while
 
 
-    }//if s
+   printf("to delete all activities enter 'A' , to delete single activity enter 'S'");
+   getchar(); 
+   scanf("%c" , &ch);
+   if(ch == 'A' || ch == 'a' ){
+      while(  registered_cur != NULL  ){ 
+         if(  registered_cur->id == ID ){
+            registered_prev->next = registered_cur->next;
+         }//if
+         registered_prev = registered_cur;
+         registered_cur = registered_cur->next;
+      }//while
+                 
+      while(  singleVisit_cur != NULL  ){ 
+         if(  singleVisit_cur->id == ID ){
+            singleVisit_prev->next = singleVisit_cur->next;
+         }//if
+         singleVisit_prev = singleVisit_cur;
+         singleVisit_cur = singleVisit_cur->next;
+      }//while
+   
+   }//if a
+                
+   if(ch == 'S' || ch == 's' ){
+   
+   // the user write the name of the activity that he want to delete
+      printf("Enter the name of the Activity you want to delete \n"); 
+      gets(Aname); 
+                  // serch by id and activity name to delete  single activite                
+      while(  registered_cur != NULL  ){ 
+         if(  registered_cur->id == ID && strstr(registered_cur->ActivityZone , Aname ) != NULL  ){
+            registered_prev->next = registered_cur->next;
+         }
+         registered_prev = registered_cur;
+         registered_cur = registered_cur->next;
+      }//while
+                 
+      while(  singleVisit_cur != NULL ){ 
+         if(  singleVisit_cur->id == ID  &&  strstr( singleVisit_cur->ActivityZone , Aname ) != NULL ){
+            singleVisit_prev->next = singleVisit_cur->next;
+         }
+         singleVisit_prev = singleVisit_cur;
+         singleVisit_cur = singleVisit_cur->next;
+      }//ehile
+   
+                 
+   }//if s
 }//deleterecord
-
 //void showAttendeeReport(){
 //
 //    char Aname[35];
