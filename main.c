@@ -28,6 +28,7 @@ typedef struct {
 struct Attendee {
      Date *date;
     struct Attendee *next;
+    Companion *listOfCompanion;
     int id;
     char name[20];
     int age;
@@ -35,7 +36,6 @@ struct Attendee {
     char address[7];
     char ActivityZone[35];
     int numOfCompanion;
-    Companion *listOfCompanion;
     float totalFees;
     float balance;
     float activityFee;
@@ -44,6 +44,7 @@ struct Attendee {
 
 
 typedef struct {
+    Day *days; // { { "21/11/2021", 25} , { "22/11/2021", 7}, { "23/11/2021", 4}, { "24/11/2021", 19} }
     char name[35];
     float price;
     Date startDate;  // 21/11/2021
@@ -51,7 +52,6 @@ typedef struct {
     int freePassAge;    // -1 if no pass age
     int ageRestriction; // -1 if no restriction
     int nDays;  // 4 (days)
-    Day *days; // { { "21/11/2021", 25} , { "22/11/2021", 7}, { "23/11/2021", 4}, { "24/11/2021", 19} }
 } Activity;
 
 
@@ -92,7 +92,7 @@ void testDaysList(int nDaysDifference, Day *daysList);
 void createFiles();
 struct Attendee *registered = NULL;
 struct Attendee *singleVisit = NULL;
-struct Attendee *registered_head, *singleVisit_head, *registered_cur, *singleVisit_cur;
+struct Attendee *registered_head = NULL , *singleVisit_head = NULL, *registered_cur, *singleVisit_cur;
 Activity *activities = NULL;
 int numRegistered, numSingle;
 Day *daysList = NULL;
@@ -152,27 +152,30 @@ void addNewAttendee() {
         //temp->date->mm = 
         printf("Enter the year of your Reservation:");
         scanf("%d", &temp->date->yy);
-
+         printf("1");
         FoundSameDate = false;
-
-        struct Attendee *temp_cur = singleVisit_head;
-        while (temp_cur->next !=
-               NULL) {//to check if the Attende is a single vistor  and have an reservation in the same date
-            if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd &&
-                temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {
+        printf("2");
+         struct Attendee *temp_cur ;
+       if( singleVisit_head != NULL ){
+       temp_cur = singleVisit_head;
+        printf("3");
+        while (temp_cur->next != NULL) {//to check if the Attende is a single vistor  and have an reservation in the same date
+                if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd && temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {
                 FoundSameDate = true;
                 break;
             }
             temp_cur = temp_cur->next;
         }
-        if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd && temp_cur->date->mm == temp->date->mm &&
-            temp_cur->date->yy ==
-            temp->date->yy) {//to check the date .. if there is just one node or this is the last node
+        
+        if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd && temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {//to check the date .. if there is just one node or this is the last node
+            
             FoundSameDate = true;
             printf("Sorry you already booked an Event in the same date .. try again with another day :(  ");
             break;
         }
-
+        }//end if (singleVisit_head == NULL)
+        printf("4");
+        if( registered_head != NULL ){
 
         if (!FoundSameDate) {
             temp_cur = registered_head;
@@ -193,8 +196,9 @@ void addNewAttendee() {
                 break;
             }
         }//end else
+        }//end if (registered_head == NULL)
     }//end will
-
+printf("5");
     char tempActivityZone[35];
     bool ActivityFound = false;
 
@@ -204,15 +208,16 @@ void addNewAttendee() {
         printf("Enter The ActivityZone:");
         scanf("%s", tempActivityZone);
 
-        for (j = 0; j < 10; j++) {//its better to change 10 with the number of activities
+        for (j = 0; j < nActivities; j++) {//its better to change 10 with the number of activities
             Activity TempPName = *(activities + j);
             if (strstr(TempPName.name, tempActivityZone) != NULL) { //tempActivityZone.equals( TempPName.name )??
                 strcpy (temp->ActivityZone, tempActivityZone);
                 temp->activityFee = TempPName.price;
 
-
+                getchar();
                 printf("Enter numuer Of Companion:");
-                scanf("%d", &temp->numOfCompanion);
+                scanf("%d ", &temp->numOfCompanion);
+                getchar(); 
                 if (temp->numOfCompanion == 0) {
                     temp->state = 'V';
                     temp->listOfCompanion = NULL;
