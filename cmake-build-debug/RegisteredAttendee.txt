@@ -1,59 +1,7 @@
 Registered Attendees:
 ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-123   heila                22    abc123   RUH SAFARI PARK                     2                    55.00           15.00          
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-123   he                   22    abc123   RUH SAFARI PARK                     2                    55.00           15.00          
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-123   heila                22    abc123   RUH SAFARI PARK                     2                    55.00           15.00          
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
-Registered Attendees:
-ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
+111   Alanood Khalid       20    abc123   BLVD RUH CITY                       1                    55.00           5.00
+222   Heila Almogren       22    abb120   RUH SAFARI PARK                     1                    55.00           0.00
+333   Haila Aldosari       27    abc027   RUH SAFARI EXPERIENCE               2                    150.00          0.00
+444   Alanood Alshaikh     29    abc888   COMBAT FIELD                        1                    10.00           0.00
+555   Sara Abdullah        29    abc999   WINTER WONDER LAND                  3                    150.00          0.00

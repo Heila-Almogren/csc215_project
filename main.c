@@ -105,9 +105,9 @@ char *REGISTERED_ATTENDEE_FILENAME = "RegisteredAttendee.txt";
 int main() {
 
     createFiles();
-
     showMainMenu();
     showAttendeeReport();
+    printList();
 
     return 0;
 }
@@ -123,24 +123,24 @@ void addNewAttendee() {
     printf("Enter The Attende ID:\n");
     getchar();
     scanf("%d", &temp->id);
-    printf("temp->id: %d\n", temp->id);
+
 
     printf("Enter The Attende Name:\n");
     getchar();
     scanf("%[^\n]s", temp->name);
-    printf("temp->name: %s\n", temp->name);
+
 
 
     printf("Enter The Attende Age:\n");
     getchar();
     scanf("%d", &temp->age);
-    printf("temp->age: %d\n", temp->age);
+
 
 
     printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):\n");
     getchar();
     scanf("%s", temp->address);
-    printf("temp->address: %s\n", temp->address);
+
 
     bool FoundSameDate = true;
     while (FoundSameDate) {
@@ -224,7 +224,7 @@ void addNewAttendee() {
         printf("Enter The ActivityZone:");
         getchar();
         scanf("%[^\n]s", tempActivityZone);
-        printf("tempActivityZone: %s\n", tempActivityZone);
+//        printf("tempActivityZone: %s\n", tempActivityZone);
         for (j = 0; j < nActivities; j++) {//its better to change 10 with the number of activities
             Activity TempPName = *(activities + j);
             if (strstr(TempPName.name, tempActivityZone) != NULL) { //tempActivityZone.equals( TempPName.name )??
@@ -1767,4 +1767,48 @@ void writeAttendee(char *fileName, struct Attendee *attendee) {
         }
     }
     fclose(fp);
+}
+
+
+void printList() {
+
+    //The function prints on the screen the attendees information that stored in the linked list activity by activity.
+    //It prints each records in a single line with their header of each columns separated by tabs
+    //(i.e, data in a line separated by tab).
+
+    char *activityName;
+    singleVisit_cur = singleVisit_head;
+    registered_cur= registered_head;
+    int i;
+    for (i = 0; i < nActivities; i++) {
+
+        activityName = (activities + i)->name;
+        printf("\t  %-35s\n", activityName);
+        printf("id \t Name \t age \t state \t adress \t Activity Zone \t num of companions \t list of companions \t total fees \t balance \t activityfees\n");
+
+        while (singleVisit_cur->next != NULL) {
+            if(strstr(singleVisit_cur->ActivityZone,activityName)!=NULL){
+                printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", singleVisit_cur->id, singleVisit_cur->name,
+                       singleVisit_cur->age, singleVisit_cur->state, singleVisit_cur->address,
+                       singleVisit_cur->ActivityZone, singleVisit_cur->numOfCompanion);
+                printf("} \t %f \t %f \t %f\n", singleVisit_cur->activityFee, singleVisit_cur->totalFees,singleVisit_cur->balance);}
+            singleVisit_cur = singleVisit_cur->next;
+        }
+        while (registered_cur->next != NULL) {
+            if(strstr(registered_cur->ActivityZone,activityName)!=NULL){
+                printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", registered_cur->id, registered_cur->name, registered_cur->age, registered_cur->state,
+                       registered_cur->address, registered_cur->ActivityZone, registered_cur->numOfCompanion);
+                for (int i = 0; i < registered_cur->numOfCompanion; i++) {
+                    printf("{%d", (registered_cur->listOfCompanion + i)->id);
+                    printf("%s", (registered_cur->listOfCompanion + i)->name);
+                    printf("%d", (registered_cur->listOfCompanion + i)->age);
+                    printf("%c", (registered_cur->listOfCompanion + i)->gender);
+                    printf("%s}", (registered_cur->listOfCompanion + i)->address);
+                }
+                printf("} \t %.2f \t %.2f \t %.2f\n", registered_cur->activityFee, registered_cur->totalFees, registered_cur->balance);
+            }
+            registered_cur = registered_cur->next;
+        }
+    }
+
 }
