@@ -1221,6 +1221,9 @@ void showAttendee() {
             case 2: {
                 //"2.Records of single visit attendees
                 singleVisit_cur = singleVisit_head;
+                printf("Records of registered attendees:\n");
+                printf("id \t Name \t age \t state \t adress \t Activity Zone \t num of companions \t list of companions \t total fees \t balance \t activityfees\n");
+                
                 while (singleVisit_cur->next != NULL) {
                     printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", singleVisit_cur->id, singleVisit_cur->name,
                            singleVisit_cur->age, singleVisit_cur->state, singleVisit_cur->address,
@@ -1234,14 +1237,15 @@ void showAttendee() {
             }
 
             case 3: {
-            int i ;
                 //3.Records of registered attendees
                 registered_cur = registered_head;
                 struct Attendee temp;
+                printf("Records of registered attendees:\n");
+                printf("id \t Name \t age \t state \t adress \t Activity Zone \t num of companions \t list of companions \t total fees \t balance \t activityfees\n");
                 while (registered_cur->next != NULL) {
                     printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", temp.id, temp.name, temp.age, temp.state,
                            temp.address, temp.ActivityZone, temp.numOfCompanion);
-                    for ( i = 0; i < temp.numOfCompanion; i++) {
+                    for (int i = 0; i < temp.numOfCompanion; i++) {
                         printf("{%d", (temp.listOfCompanion + i)->id);
                         printf("%s", (temp.listOfCompanion + i)->name);
                         printf("%d", (temp.listOfCompanion + i)->age);
@@ -1257,20 +1261,7 @@ void showAttendee() {
 
 
             case 4: {
-                /*Records in particular date
-                singleVisit_cur = singleVisit_head; 
-                registered_cur = registered_head;
                 
-                struct Attendee* allAttendeess=(struct Attendee*)calloc(numRegistered+numSingle,sizeof(struct Attendee));
-                for(int i=0; registered_cur!=NULL;i++){
-                    *(allAttendeess+i)=*registered_cur;
-                    registered_cur=registered_cur->next;
-                }
-
-                for(int i=0; singleVisit_cur!=NULL;i++){
-                    *(allAttendeess+i)=*singleVisit_cur;
-                    singleVisit_cur=singleVisit_cur->next;
-                };*/
 
                 Date *tempd;
                 printf("please enter the Year of the paticular date");
@@ -1278,7 +1269,7 @@ void showAttendee() {
                 printf("please enter the Month of the paticular date");
                 scanf("%d", &(tempd->mm));
                 printf("please enter the Day of the paticular date");
-                scanf("%d", (tempd->yy));
+                scanf("%d", &(tempd->yy));
 
                 while (singleVisit_cur->next != NULL) {
                     if (compareDates(*tempd, *singleVisit_cur->date) == 0) {
@@ -1677,6 +1668,37 @@ void writeAttendee(char *fileName, struct Attendee *attendee) {
         }
     fclose(fp);
     }
+
+void printList() {
+
+    //  summary of total attendees’ numbers for each activity
+    
+    printf("\t  %-35s | %s\n", "Activity Name", "Total Attendees");
+    
+    printf("id \t Name \t age \t state \t adress \t Activity Zone \t num of companions \t list of companions \t total fees \t balance \t activityfees\n");
+                
+    Activity currentActivity;
+    char *activityName;
+    int totalAttendeesForActivity = 0;
+
+    int i, j;
+    for (i = 0; i < nActivities; i++) {
+        currentActivity = *(activities + i);
+        activityName = (activities + i)->name;
+        for (j = 0; j < currentActivity.nDays; j++) {
+            totalAttendeesForActivity += ((currentActivity.days) + j)->attendeeCounter;
+        }
+        printf("%3d | %-35s | %3d\n", i + 1, activityName, totalAttendeesForActivity);
+    }
+ singleVisit_cur = singleVisit_head;
+    while (singleVisit_cur->next != NULL) {
+        printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", singleVisit_cur->id, singleVisit_cur->name,
+        singleVisit_cur->age, singleVisit_cur->state, singleVisit_cur->address,
+        singleVisit_cur->ActivityZone, singleVisit_cur->numOfCompanion);
+        printf("} \t %f \t %f \t %f\n", singleVisit_cur->activityFee, singleVisit_cur->totalFees,singleVisit_cur->balance);
+        singleVisit_cur = singleVisit_cur->next;
+                }
+}
 /* void insertAtBeginning(struct node **head, Attendee attendee) {
      Node *newNode = (Node *) malloc(sizeof(Node));
      newNode->val = attendee;
@@ -1701,14 +1723,6 @@ void writeAttendee(char *fileName, struct Attendee *attendee) {
 } }
 
 
-void printList(Node* head) {
-Node * current = head;
-while(current != NULL)
-{
-   printf("%d->",current->val); // edit this to show the details of attendee
-   current = current ->next;
-}
-}
 
 
 void deleteNode(Node **head, int id) {
