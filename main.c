@@ -105,22 +105,10 @@ char *REGISTERED_ATTENDEE_FILENAME = "RegisteredAttendee.txt";
 int main() {
 
    createFiles();
-    // read file and fill Activity list
-   readFile();
-   showMainMenu();
-//    addNewAttendee();
-//    editActivity();
-    // showAttendeeReport();
-    //editActivity();
-    //createFiles();
-    // struct Attendee at1 = {123, "Heila"};
-    //struct Attendee at2 = {321, "Anood"};
-    //struct Attendee at3 = {111, "Haila"};
-    //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at1);
-    //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at2);
-    //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at3);
-//    getDaysList(activities+1, (activities+1)->startDate, (activities+1)->endDate);
 
+   showMainMenu();
+   showAttendeeReport();
+   
    return 0;
 }
 
@@ -669,10 +657,10 @@ void readFile() {
 
    fclose(fp);
 
-   test_readFile(activities);
+   //test_readFile(activities);
 }
 
-void test_readFile(Activity *activities) {
+/*void test_readFile(Activity *activities) {
    int i;
    for (i = 0; i < 10; i++) {
       printf("%d | Name: %-32s\t Price: %-18lf\t Date:%d/%d/%d-%d/%d/%d \t freePassAge:%d\t ageRestriction: %d\n",
@@ -690,7 +678,7 @@ void test_readFile(Activity *activities) {
          );
    
    }
-}
+}*/
 
 int maxDaysDependingOnMonth(int month) {
    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
@@ -1119,11 +1107,11 @@ bool isDateInFuture(char date[]) {
 
 void showMainMenu() {
 
-   printf("--------------------");
-   printf("WELCOME TO");
-   printf("Riyadh Season 2021");
-   printf("Imagine, MORE!!");
-   printf("--------------------");
+   printf("--------------------\n");
+   printf("WELCOME TO\n");
+   printf("Riyadh Season 2021\n");
+   printf("Imagine, MORE!!/n");
+   printf("--------------------\n");
 
    readFile();
 
