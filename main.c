@@ -26,7 +26,7 @@ typedef struct {
 
 // Attendee struct
 struct Attendee {
-     Date *date;
+    Date *date;
     struct Attendee *next;
     Companion *listOfCompanion;
     int id;
@@ -39,7 +39,6 @@ struct Attendee {
     float totalFees;
     float balance;
     float activityFee;
-   
 };
 
 
@@ -89,10 +88,12 @@ void assignDate(Date *date, char stringDate[]);
 int getnDays(Date startDate, Date endDate);
 
 void testDaysList(int nDaysDifference, Day *daysList);
+
 void createFiles();
+
 struct Attendee *registered = NULL;
 struct Attendee *singleVisit = NULL;
-struct Attendee *registered_head = NULL , *singleVisit_head = NULL, *registered_cur, *singleVisit_cur;
+struct Attendee *registered_head = NULL, *singleVisit_head = NULL, *registered_cur, *singleVisit_cur;
 Activity *activities = NULL;
 int numRegistered, numSingle;
 Day *daysList = NULL;
@@ -103,16 +104,16 @@ char *REGISTERED_ATTENDEE_FILENAME = "RegisteredAttendee.txt";
 
 int main() {
 
-
+    createFiles();
     // read file and fill Activity list
     readFile();
     showMainMenu();
 //    addNewAttendee();
 //    editActivity();
-   // showAttendeeReport();
+    // showAttendeeReport();
     //editActivity();
     //createFiles();
-   // struct Attendee at1 = {123, "Heila"};
+    // struct Attendee at1 = {123, "Heila"};
     //struct Attendee at2 = {321, "Anood"};
     //struct Attendee at3 = {111, "Haila"};
     //writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, at1);
@@ -126,62 +127,55 @@ int main() {
 
 void addNewAttendee() {
     struct Attendee *temp = (struct Attendee *) malloc(sizeof(struct Attendee));
-
-    printf("Enter The Attende ID:");
+    char c;
+    printf("Enter The Attende ID:\n");
+    getchar();
     scanf("%d", &temp->id);
+    printf("temp->id: %d\n", temp->id);
 
-    printf("Enter The Attende Name:");
-    scanf("%s", temp->name);
+    printf("Enter The Attende Name:\n");
+    getchar();
+    scanf("%[^\n]s", temp->name);
+    printf("temp->name: %s\n", temp->name);
 
-    printf("Enter The Attende Age:");
+
+    printf("Enter The Attende Age:\n");
+    getchar();
     scanf("%d", &temp->age);
+    printf("temp->age: %d\n", temp->age);
 
-    printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
+
+    printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):\n");
+    getchar();
     scanf("%s", temp->address);
+    printf("temp->address: %s\n", temp->address);
 
-    
     bool FoundSameDate = true;
     while (FoundSameDate) {
-
-        getchar();
+        temp->date = (Date *) malloc(sizeof(Date));
         printf("Enter the day of your Reservation:");
-        scanf("%d", &temp->date->dd ); 
-        //temp->date->dd = Dtemp.dd ;
+        getchar();
+        scanf("%d", &temp->date->dd);
+        printf("temp->date->dd: %d\n", temp->date->dd);
+        //temp->date->dd = Dtemp.dd;
         printf("Enter the month of your Reservation:");
-        scanf("%d", &temp->date->mm);
-        //temp->date->mm = 
+        getchar();
+        scanf("%d", &(temp->date->mm));
+        printf("temp->date->mm: %d\n", temp->date->mm);
+        //temp->date->mm =
         printf("Enter the year of your Reservation:");
-        scanf("%d", &temp->date->yy);
-         printf("1");
+        getchar();
+        scanf("%d", &(temp->date->yy));
+        printf("temp->date->yy: %d\n", temp->date->yy);
+        printf("1");
         FoundSameDate = false;
         printf("2");
-         struct Attendee *temp_cur ;
-       if( singleVisit_head != NULL ){
-       temp_cur = singleVisit_head;
-        printf("3");
-        while (temp_cur->next != NULL) {//to check if the Attende is a single vistor  and have an reservation in the same date
-                if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd && temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {
-                FoundSameDate = true;
-                break;
-            }
-            temp_cur = temp_cur->next;
-        }
-        
-        if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd && temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {//to check the date .. if there is just one node or this is the last node
-            
-            FoundSameDate = true;
-            printf("Sorry you already booked an Event in the same date .. try again with another day :(  ");
-            break;
-        }
-        }//end if (singleVisit_head == NULL)
-        printf("4");
-        if( registered_head != NULL ){
-
-        if (!FoundSameDate) {
-            temp_cur = registered_head;
-
+        struct Attendee *temp_cur;
+        if (singleVisit_head != NULL) {
+            temp_cur = singleVisit_head;
+            printf("3");
             while (temp_cur->next !=
-                   NULL) {//to check if the Attende is a registerd  and have an reservation in the same date
+                   NULL) {//to check if the Attende is a single vistor  and have an reservation in the same date
                 if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd &&
                     temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {
                     FoundSameDate = true;
@@ -189,16 +183,41 @@ void addNewAttendee() {
                 }
                 temp_cur = temp_cur->next;
             }
+
             if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd &&
                 temp_cur->date->mm == temp->date->mm && temp_cur->date->yy ==
                                                         temp->date->yy) {//to check the date .. if there is just one node or this is the last node
+
+                FoundSameDate = true;
                 printf("Sorry you already booked an Event in the same date .. try again with another day :(  ");
                 break;
             }
-        }//end else
+        }//end if (singleVisit_head == NULL)
+        printf("4");
+        if (registered_head != NULL) {
+
+            if (!FoundSameDate) {
+                temp_cur = registered_head;
+
+                while (temp_cur->next !=
+                       NULL) {//to check if the Attende is a registerd  and have an reservation in the same date
+                    if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd &&
+                        temp_cur->date->mm == temp->date->mm && temp_cur->date->yy == temp->date->yy) {
+                        FoundSameDate = true;
+                        break;
+                    }
+                    temp_cur = temp_cur->next;
+                }
+                if (temp->id == temp_cur->id && temp_cur->date->dd == temp->date->dd &&
+                    temp_cur->date->mm == temp->date->mm && temp_cur->date->yy ==
+                                                            temp->date->yy) {//to check the date .. if there is just one node or this is the last node
+                    printf("Sorry you already booked an Event in the same date .. try again with another day :(  ");
+                    break;
+                }
+            }//end else
         }//end if (registered_head == NULL)
     }//end will
-printf("5");
+    printf("5");
     char tempActivityZone[35];
     bool ActivityFound = false;
 
@@ -206,18 +225,20 @@ printf("5");
 
     while (!ActivityFound) {
         printf("Enter The ActivityZone:");
-        scanf("%s", tempActivityZone);
-
+        getchar();
+        scanf("%[^\n]s", tempActivityZone);
+        printf("tempActivityZone: %s\n", tempActivityZone);
         for (j = 0; j < nActivities; j++) {//its better to change 10 with the number of activities
             Activity TempPName = *(activities + j);
             if (strstr(TempPName.name, tempActivityZone) != NULL) { //tempActivityZone.equals( TempPName.name )??
                 strcpy (temp->ActivityZone, tempActivityZone);
                 temp->activityFee = TempPName.price;
 
+
+                printf("Enter number Of Companion:");
                 getchar();
-                printf("Enter numuer Of Companion:");
-                scanf("%d ", &temp->numOfCompanion);
-                getchar(); 
+                scanf("%d", &temp->numOfCompanion);
+                printf("n comp %d", temp->numOfCompanion);
                 if (temp->numOfCompanion == 0) {
                     temp->state = 'V';
                     temp->listOfCompanion = NULL;
@@ -231,15 +252,18 @@ printf("5");
                     for (i = 0; i < temp->numOfCompanion; i++) {
                         // ctemp = NULL ;
                         printf("Enter #%d  Companion ID:", (i + 1));
+                        getchar();
                         scanf("%d", &Ctemp.id);
 
                         printf("Enter #%d  Companion Name:", (i + 1));
+                        getchar();
                         scanf("%s", Ctemp.name);
 
                         bool ageRestriction = true;
                         while (ageRestriction) {
                             ageRestriction = false;
                             printf("Enter #%d  Companion Age:", (i + 1));
+                            getchar();
                             scanf("%d", &Ctemp.age);
 
                             if (TempPName.ageRestriction == -1);
@@ -248,7 +272,7 @@ printf("5");
                                 printf("Sorry There is a ageRestriction in this event( age must be > %d  years )  .. try again ! ",
                                        TempPName.ageRestriction);
                                 ageRestriction = true;
-                                break;
+//                                break;
                             }
                         }// end while
 
@@ -256,7 +280,7 @@ printf("5");
                         else if (Ctemp.age <= TempPName.freePassAge)
                             counterfreePassAge++;
 
-                        printf("Enter The Attende Addres as (3 alphabet characters then 3 digits):");
+                        printf("Enter The companion's Address as (3 alphabet characters then 3 digits):");
                         scanf("%s", Ctemp.address);
 
                         *(temp->listOfCompanion + i) = Ctemp;
@@ -281,6 +305,7 @@ printf("5");
 
     //bool enough_amount = true ;
     while (1) {
+        getchar();
         printf("Enter The Attende Balance:");
         scanf("%f", &temp->balance);
 
@@ -289,23 +314,24 @@ printf("5");
         else
             break;
     }
-    int x ,z ;
-    
-   
-        
-        for (x = 0; x < nActivities; x++) {
-                Activity TempPName = *(activities + x);
-                if (strstr(TempPName.name, temp->ActivityZone) != NULL) {
-                 for (z = 0; z < TempPName.nDays; z++) {
-                 if(  temp->date->dd == ((TempPName.days) + z )->date.dd &&  temp->date->mm == ((TempPName.days) + z )->date.mm  &&  temp->date->yy == ((TempPName.days) + z )->date.yy   )
-                  if ( ( ((TempPName.days) + z )->attendeeCounter + 1 + temp->numOfCompanion ) <=50 )
-                  ((TempPName.days) + z )->attendeeCounter += 1+ temp->numOfCompanion ;
-                  else
-                  printf("Sorry this Activity is FULL for today  .. try with another date or Activity"); 
-                   }                                    
-           
+    int x, z;
+
+
+    for (x = 0; x < nActivities; x++) {
+        Activity TempPName = *(activities + x);
+        if (strstr(TempPName.name, temp->ActivityZone) != NULL) {
+            for (z = 0; z < TempPName.nDays; z++) {
+                if (temp->date->dd == ((TempPName.days) + z)->date.dd &&
+                    temp->date->mm == ((TempPName.days) + z)->date.mm &&
+                    temp->date->yy == ((TempPName.days) + z)->date.yy)
+                    if ((((TempPName.days) + z)->attendeeCounter + 1 + temp->numOfCompanion) <= 50)
+                        ((TempPName.days) + z)->attendeeCounter += 1 + temp->numOfCompanion;
+                    else
+                        printf("Sorry this Activity is FULL for today  .. try with another date or Activity");
+            }
+
         } else("wrong Activity name");
-        }
+    }
 
 
     if (temp->numOfCompanion > 0) { //add the record to the registered linked list
@@ -329,12 +355,12 @@ printf("5");
                 singleVisit_cur = singleVisit_cur->next;
         }
     }
-    char *NameOfRegisteredFile = "RegisteredAttendee.txt", *NameOfSingleVisitFile = "Single Visit Attendee.txt";
+    temp->balance = temp->balance - ((temp->activityFee)*(float)(1+(temp->numOfCompanion - counterfreePassAge)));
 
     if (temp->state == 'R')
-        writeAttendee(NameOfRegisteredFile , temp);
+        writeAttendee(REGISTERED_ATTENDEE_FILENAME, temp);
     else if (temp->state == 'S')
-        writeAttendee(NameOfSingleVisitFile , temp );
+        writeAttendee(SINGLE_VISIT_ATTENDEE_FILENAME, temp);
 }//end addNewAttendee
 
 
@@ -489,7 +515,7 @@ void readFile() {
     nActivities = 0;
 
     FILE *fp;
-    fp = fopen("Activities.txt", "r");
+    fp = fopen("../Activities.txt", "r");
 
     if (fp == NULL) {
         printf("Can not open %s\n", "Activities.txt");
@@ -1166,20 +1192,21 @@ void showAttendee() {
                 singleVisit_cur = singleVisit_head;
                 registered_cur = registered_head;
                 struct Attendee *temp;
-                struct Attendee *allAttendeess = (struct Attendee *) calloc(numRegistered + numSingle,sizeof(struct Attendee));
-                    int i ,j ;                                                       
-                for ( i = 0; registered_cur != NULL; i++) {
+                struct Attendee *allAttendeess = (struct Attendee *) calloc(numRegistered + numSingle,
+                                                                            sizeof(struct Attendee));
+                int i, j;
+                for (i = 0; registered_cur != NULL; i++) {
                     *(allAttendeess + i) = *registered_cur;
                     registered_cur = registered_cur->next;
                 }
 
-                for ( i = 0; singleVisit_cur != NULL; i++) {
+                for (i = 0; singleVisit_cur != NULL; i++) {
                     *(allAttendeess + i) = *singleVisit_cur;
                     singleVisit_cur = singleVisit_cur->next;
                 }
 
-                for ( i = 0; i < numRegistered + numSingle; i++) {
-                    for ( j = i + 1; j < numRegistered + numSingle; j++) {
+                for (i = 0; i < numRegistered + numSingle; i++) {
+                    for (j = i + 1; j < numRegistered + numSingle; j++) {
                         if (strcmp((allAttendeess + i)->name, (allAttendeess + j)->name) > 0) {
                             *temp = *(allAttendeess + i);
                             *(allAttendeess + i) = *(allAttendeess + j);
@@ -1190,14 +1217,14 @@ void showAttendee() {
                     }
 
                 }
-                 i = 0;
+                i = 0;
                 while ((allAttendeess + i)->next != NULL) {
                     printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", (allAttendeess + i)->id,
                            (allAttendeess + i)->name, (allAttendeess + i)->age, (allAttendeess + i)->state,
                            (allAttendeess + i)->address, (allAttendeess + i)->ActivityZone,
                            (allAttendeess + i)->numOfCompanion);
                     if ((allAttendeess + i)->state == 'v') {
-                        for ( i = 0; i < (allAttendeess + i)->numOfCompanion; i++) {
+                        for (i = 0; i < (allAttendeess + i)->numOfCompanion; i++) {
 
                             printf("{%d", ((allAttendeess + i)->listOfCompanion + i)->id);
                             printf("%s", ((allAttendeess + i)->listOfCompanion + i)->name);
@@ -1234,14 +1261,14 @@ void showAttendee() {
             }
 
             case 3: {
-            int i ;
+                int i;
                 //3.Records of registered attendees
                 registered_cur = registered_head;
                 struct Attendee temp;
                 while (registered_cur->next != NULL) {
                     printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", temp.id, temp.name, temp.age, temp.state,
                            temp.address, temp.ActivityZone, temp.numOfCompanion);
-                    for ( i = 0; i < temp.numOfCompanion; i++) {
+                    for (i = 0; i < temp.numOfCompanion; i++) {
                         printf("{%d", (temp.listOfCompanion + i)->id);
                         printf("%s", (temp.listOfCompanion + i)->name);
                         printf("%d", (temp.listOfCompanion + i)->age);
@@ -1294,12 +1321,12 @@ void showAttendee() {
                 }
 
                 while (registered_cur->next != NULL) {
-                int i ;
+                    int i;
                     if (compareDates(*tempd, *registered_cur->date) == 0) {
                         printf("%d \t %s \t %d \t %c \t %s \t %s \t %d \t {", registered_cur->id, registered_cur->name,
                                registered_cur->age, registered_cur->state, registered_cur->address,
                                registered_cur->ActivityZone, registered_cur->numOfCompanion);
-                        for ( i = 0; i < registered_cur->numOfCompanion; i++) {
+                        for (i = 0; i < registered_cur->numOfCompanion; i++) {
                             printf("{%d", (registered_cur->listOfCompanion + i)->id);
                             printf("%s", (registered_cur->listOfCompanion + i)->name);
                             printf("%d", (registered_cur->listOfCompanion + i)->age);
@@ -1333,83 +1360,85 @@ void showAttendee() {
 
 
 void deleteRecord() {
-   char ch ;
-   int ID;
-   char Aname[35];
-    
-   registered_cur = (registered_head)->next;
-   struct Attendee *registered_prev = registered_head;
-                 
-   singleVisit_cur = (singleVisit_head)->next;
-   struct Attendee *singleVisit_prev = singleVisit_head;
-                 
-   printf("Enter Attendee id :\n " ) ; 
-   scanf("%d" , &ID); 
+    char ch;
+    int ID;
+    char Aname[35];
+
+    registered_cur = (registered_head)->next;
+    struct Attendee *registered_prev = registered_head;
+
+    singleVisit_cur = (singleVisit_head)->next;
+    struct Attendee *singleVisit_prev = singleVisit_head;
+
+    printf("Enter Attendee id :\n ");
+    scanf("%d", &ID);
 
 //to display the names of the activites  
-   while( registered_cur != NULL  ){ 
-      if( registered_cur->id == ID){
-         printf("Activity name : %s \n" , registered_cur->ActivityZone ); 
-         registered_prev = registered_cur;
-         registered_cur = registered_cur->next;
-      
-      }}//while
+    while (registered_cur != NULL) {
+        if (registered_cur->id == ID) {
+            printf("Activity name : %s \n", registered_cur->ActivityZone);
+            registered_prev = registered_cur;
+            registered_cur = registered_cur->next;
 
-   while( singleVisit_cur != NULL  ){ 
-      if( singleVisit_cur->id == ID){
-         printf("Activity name : %s \n" , singleVisit_cur->ActivityZone ); 
-         singleVisit_prev = singleVisit_cur;
-         singleVisit_cur = singleVisit_cur->next;
-      
-      }}//while
+        }
+    }//while
+
+    while (singleVisit_cur != NULL) {
+        if (singleVisit_cur->id == ID) {
+            printf("Activity name : %s \n", singleVisit_cur->ActivityZone);
+            singleVisit_prev = singleVisit_cur;
+            singleVisit_cur = singleVisit_cur->next;
+
+        }
+    }//while
 
 
-   printf("to delete all activities enter 'A' , to delete single activity enter 'S'");
-   getchar(); 
-   scanf("%c" , &ch);
-   if(ch == 'A' || ch == 'a' ){
-      while(  registered_cur != NULL  ){ 
-         if(  registered_cur->id == ID ){
-            registered_prev->next = registered_cur->next;
-         }//if
-         registered_prev = registered_cur;
-         registered_cur = registered_cur->next;
-      }//while
-                 
-      while(  singleVisit_cur != NULL  ){ 
-         if(  singleVisit_cur->id == ID ){
-            singleVisit_prev->next = singleVisit_cur->next;
-         }//if
-         singleVisit_prev = singleVisit_cur;
-         singleVisit_cur = singleVisit_cur->next;
-      }//while
-   
-   }//if a
-                
-   if(ch == 'S' || ch == 's' ){
-   
-   // the user write the name of the activity that he want to delete
-      printf("Enter the name of the Activity you want to delete \n"); 
-      gets(Aname); 
-                  // serch by id and activity name to delete  single activite                
-      while(  registered_cur != NULL  ){ 
-         if(  registered_cur->id == ID && strstr(registered_cur->ActivityZone , Aname ) != NULL  ){
-            registered_prev->next = registered_cur->next;
-         }
-         registered_prev = registered_cur;
-         registered_cur = registered_cur->next;
-      }//while
-                 
-      while(  singleVisit_cur != NULL ){ 
-         if(  singleVisit_cur->id == ID  &&  strstr( singleVisit_cur->ActivityZone , Aname ) != NULL ){
-            singleVisit_prev->next = singleVisit_cur->next;
-         }
-         singleVisit_prev = singleVisit_cur;
-         singleVisit_cur = singleVisit_cur->next;
-      }//ehile
-   
-                 
-   }//if s
+    printf("to delete all activities enter 'A' , to delete single activity enter 'S'");
+    getchar();
+    scanf("%c", &ch);
+    if (ch == 'A' || ch == 'a') {
+        while (registered_cur != NULL) {
+            if (registered_cur->id == ID) {
+                registered_prev->next = registered_cur->next;
+            }//if
+            registered_prev = registered_cur;
+            registered_cur = registered_cur->next;
+        }//while
+
+        while (singleVisit_cur != NULL) {
+            if (singleVisit_cur->id == ID) {
+                singleVisit_prev->next = singleVisit_cur->next;
+            }//if
+            singleVisit_prev = singleVisit_cur;
+            singleVisit_cur = singleVisit_cur->next;
+        }//while
+
+    }//if a
+
+    if (ch == 'S' || ch == 's') {
+
+        // the user write the name of the activity that he want to delete
+        printf("Enter the name of the Activity you want to delete \n");
+        gets(Aname);
+        // serch by id and activity name to delete  single activite
+        while (registered_cur != NULL) {
+            if (registered_cur->id == ID && strstr(registered_cur->ActivityZone, Aname) != NULL) {
+                registered_prev->next = registered_cur->next;
+            }
+            registered_prev = registered_cur;
+            registered_cur = registered_cur->next;
+        }//while
+
+        while (singleVisit_cur != NULL) {
+            if (singleVisit_cur->id == ID && strstr(singleVisit_cur->ActivityZone, Aname) != NULL) {
+                singleVisit_prev->next = singleVisit_cur->next;
+            }
+            singleVisit_prev = singleVisit_cur;
+            singleVisit_cur = singleVisit_cur->next;
+        }//ehile
+
+
+    }//if s
 }//deleterecord
 //void showAttendeeReport(){
 //
@@ -1643,15 +1672,17 @@ void showAttendeeReport() {
 
 } //show attendee report
 
-void createFiles(){
+void createFiles() {
     FILE *singleVisitAttendeeFile;
     singleVisitAttendeeFile = fopen(SINGLE_VISIT_ATTENDEE_FILENAME, "ab+");
     fprintf(singleVisitAttendeeFile, "Single Visit Attendees:\n");
+    fprintf(singleVisitAttendeeFile, "%-5s %-20s %-5s %-8s %-35s %-15s %-15s\n", "ID","Name", "Age", "Address", "Activity Zone", "Activity Fee", "Balance");
     fclose(singleVisitAttendeeFile);
 
     FILE *RegisteredAttendeeFile;
     RegisteredAttendeeFile = fopen(REGISTERED_ATTENDEE_FILENAME, "ab+");
     fprintf(RegisteredAttendeeFile, "Registered Attendees:\n");
+    fprintf(RegisteredAttendeeFile, "%-5s %-20s %-5s %-8s %-35s %-20s %-15s %-15s\n", "ID","Name", "Age", "Address", "Activity Zone", "Num of Companions", "Activity Fee", "Balance");
     fclose(RegisteredAttendeeFile);
 
 
@@ -1659,24 +1690,22 @@ void createFiles(){
 
 void writeAttendee(char *fileName, struct Attendee *attendee) {
 
-  bool FirstTimeOpeningFile = true ;
-  if(FirstTimeOpeningFile ){
-  createFiles();
-  FirstTimeOpeningFile = false;
-  }
+
     FILE *fp;
     fp = fopen(fileName, "ab+");
     if (strcmp(fileName, SINGLE_VISIT_ATTENDEE_FILENAME) == 0) {
-        fprintf(fp, "%d %s %d %s %s %lf %f\n", attendee->id, attendee->name, attendee->age, attendee->address, attendee->ActivityZone,
+        fprintf(fp, "%-5d %-20s %-5d %-8s %-35s %-15.2lf %-15.2f\n", attendee->id, attendee->name, attendee->age, attendee->address,
+                attendee->ActivityZone,
                 attendee->activityFee, attendee->balance);
     } else {
         if (strcmp(fileName, REGISTERED_ATTENDEE_FILENAME) == 0) {
-            fprintf(fp, "%d %s %d %s %s %d %lf %f\n", attendee->id, attendee->name, attendee->age, attendee->address, attendee->ActivityZone,
+            fprintf(fp, "%-5d %-20s %-5d %-8s %-35s %-20d %-15.2lf %-15.2f\n", attendee->id, attendee->name, attendee->age, attendee->address,
+                    attendee->ActivityZone,
                     attendee->numOfCompanion, attendee->activityFee, attendee->balance);
         }
-        }
-    fclose(fp);
     }
+    fclose(fp);
+}
 /* void insertAtBeginning(struct node **head, Attendee attendee) {
      Node *newNode = (Node *) malloc(sizeof(Node));
      newNode->val = attendee;
