@@ -115,7 +115,11 @@ int main() {
 
 void addNewAttendee() {
     struct Attendee *temp = (struct Attendee *) malloc(sizeof(struct Attendee));
-    char c;
+    if(temp==NULL){
+        printf("Memory Allocation failed.\n");
+        return;
+    }
+
     printf("Enter The Attende ID:\n");
     getchar();
     scanf("%d", &temp->id);
@@ -141,6 +145,11 @@ void addNewAttendee() {
     bool FoundSameDate = true;
     while (FoundSameDate) {
         temp->date = (Date *) malloc(sizeof(Date));
+        if(temp->date==NULL){
+            printf("Memory Allocation failed.\n");
+            return;
+        }
+
         printf("Enter the day of your Reservation:");
         getchar();
         scanf("%d", &temp->date->dd);
@@ -234,6 +243,10 @@ void addNewAttendee() {
                     temp->state = 'R';
 
                     temp->listOfCompanion = (Companion *) calloc(temp->numOfCompanion, sizeof(Companion));
+                    if(temp->listOfCompanion==NULL){
+                        printf("Memory Allocation failed.\n");
+                        return;
+                    }
                     Companion Ctemp;
                     int i;
 
@@ -325,6 +338,10 @@ void addNewAttendee() {
     if (temp->numOfCompanion > 0) { //add the record to the registered linked list
         if (registered_head == NULL) { //if the list is empty
             registered_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+            if(registered_head==NULL){
+                printf("Memory Allocation failed.\n");
+                return;
+            }
             (registered_head) = temp;
             (registered_head)->next = NULL;
         } else { //if the list has at least one node
@@ -335,6 +352,10 @@ void addNewAttendee() {
     } else {//add the record to the singleVisit linked list
         if (singleVisit_head == NULL) { //if the list is empty
             singleVisit_head = (struct Attendee *) malloc(sizeof(struct Attendee));
+            if(singleVisit_head==NULL){
+                printf("Memory Allocation failed.\n");
+                return;
+            }
             (singleVisit_head) = temp;
             (singleVisit_head)->next = NULL;
         } else { //if the list has at least one node
@@ -420,7 +441,10 @@ void editRecord() {
 
                         Companion *Temp_listOfCompanion = (Companion *) calloc((size_of_memoryloc - counter_IDS),
                                                                                sizeof(Companion));
-
+                        if(Temp_listOfCompanion==NULL){
+                            printf("Memory Allocation failed.\n");
+                            return;
+                        }
                         printf("Enter the #%d id:", (counter_IDS));
                         getchar();
                         scanf("%d", &Companion_ID);
@@ -727,7 +751,6 @@ void setDaysList(Day *daysList, Activity *activity) {
     date1.tm_hour = 0;
     date1.tm_min = 0;
     date1.tm_sec = 0;
-    // Heila: I used this to solve this problem https://stackoverflow.com/questions/26788470/difftime-returns-strange-value-on-particular-date
     date1.tm_isdst = -1;
 
     struct tm date2;
@@ -1204,6 +1227,10 @@ void showAttendee() {
                 struct Attendee *temp;
                 struct Attendee *allAttendeess = (struct Attendee *) calloc(numRegistered + numSingle,
                                                                             sizeof(struct Attendee));
+                if(allAttendeess==NULL){
+                    printf("Memory Allocation failed.\n");
+                    return;
+                }
                 int i, j;
                 for (i = 0; registered_cur != NULL; i++) {
                     *(allAttendeess + i) = *registered_cur;
@@ -1700,6 +1727,7 @@ void showAttendeeReport() {
 void createFiles() {
     FILE *singleVisitAttendeeFile;
     singleVisitAttendeeFile = fopen(SINGLE_VISIT_ATTENDEE_FILENAME, "ab+");
+
     fprintf(singleVisitAttendeeFile, "Single Visit Attendees:\n");
     fprintf(singleVisitAttendeeFile, "%-5s %-20s %-5s %-8s %-35s %-15s %-15s\n", "ID", "Name", "Age", "Address",
             "Activity Zone", "Activity Fee", "Balance");
@@ -1720,6 +1748,11 @@ void writeAttendee(char *fileName, struct Attendee *attendee) {
 
     FILE *fp;
     fp = fopen(fileName, "ab+");
+
+    if(fp == NULL){
+        printf("%s file not found.", fileName);
+        return;
+    }
     if (strcmp(fileName, SINGLE_VISIT_ATTENDEE_FILENAME) == 0) {
         fprintf(fp, "%-5d %-20s %-5d %-8s %-35s %-15.2lf %-15.2f\n", attendee->id, attendee->name, attendee->age,
                 attendee->address,
@@ -1735,113 +1768,3 @@ void writeAttendee(char *fileName, struct Attendee *attendee) {
     }
     fclose(fp);
 }
-/* void insertAtBeginning(struct node **head, Attendee attendee) {
-     Node *newNode = (Node *) malloc(sizeof(Node));
-     newNode->val = attendee;
-     newNode->next = *head;
-     *head = newNode;
- }
-
- void insertAtEnd(struct node **head, Attendee attendee){
-     if (*head == NULL) { //if the list is empty
-         *head = (Node *) malloc(sizeof(Node));
-         (*head)->val = attendee;
-         (*head)->next = NULL; }
-     else { //if the list has at least one node
-         Node * current = *head;
-         while (current->next != NULL) {
-             current = current->next;
-         }
-  now we can add a new variable 
-   current->next = (Node *)malloc(sizeof(Node));
-   current->next->val = attendee;
-   current->next->next = NULL;
-} }
-
-
-void printList(Node* head) {
-Node * current = head;
-while(current != NULL)
-{
-   printf("%d->",current->val); // edit this to show the details of attendee
-   current = current ->next;
-}
-}
-
-
-void deleteNode(Node **head, int id) {
-if (*head != NULL) {
-   if ((*head)->val.id == id) { //if the deleted node is the first node
-       Node * temp = *head;
-       *head = (*head)->next;
-       free(temp);
-   }
-   else {
-       Node *prev = *head;
-       Node *cur = (*head)->next ;
-       while (cur != NULL) {
-           if (cur->val.id == id) {
-               prev->next = cur->next;
-               free(cur);
-               break; } //exit loop when delete the node
-           prev = cur;
-           cur = cur ->next;
-       } } } } */
-
-
-
-
-//struct node *registered_head, *prev, *cur;
-//registered_head = (struct node *) malloc(sizeof(struct node));
-
-
-
-//registered_head->val = registered;
-
-//struct node *singleVisit_head;
-//singleVisit_head = (struct node *) malloc(sizeof(struct node));
-
-// allocate memory for Activity list (array)
-//Activity *ActivitiesList = (Activity *) calloc(10, sizeof(Activity));
-
-
-// Data structures
-//void deleteNode(struct node **head, int id);
-//void printList(struct node * head);
-//void insertAtEnd(struct node **head, Attendee attendee);
-//void insertAtBeginning(struct node **head, Attendee attendee);
-
-
-/*  printf("Enter The Attende State:");
-scanf("%c", &temp -> state );
-if( temp -> state == 'V'   || temp -> state == 'v' )
-temp ->numOfCompanion = 0 ;
-else if( temp -> state == 'R'   || temp -> state == 'r' ){
-printf("Enter numuer Of Companion:");
-scanf("%d", &temp -> numOfCompanion );
-temp -> listOfCompanion = (Companion*) calloc(temp -> numOfCompanion , sizeof (Companion) ) ;
-int i ;
-<<<<<<< Updated upstream
-Companion Ctemp ; */
-
-
-
-
-/*  Companion_temp = *(temp_cur->listOfCompanion + k);
-              if( Companion_temp.id == Companion_ID ){
-               counter_IDS++ ; 
-               break ;
-               }
-              else {
-              if( counter_realcompanion != 0 )
-               Temp_listOfCompanion =(Companion *) realloc(Temp_listOfCompanion,counter_realcompanion*sizeof(Companion)) ;
-               
-                *(Temp_listOfCompanion + counter_realcompanion) = Companion_temp ; //temp_cur->listOfCompanion = (Companion *) calloc(temp_cur->numOfCompanion, sizeof(Companion));
-                counter_realcompanion++ ;
-                   
-            }//end else Companion_temp.id != Companion_ID 
-            }//end for to check all the list
-            //if( Companion_temp.id == Companion_ID )  counter_IDS++ ; 
-            }//end while to check if we delete all NumberOfIDS
-           // temp_cur->listOfCompanion = Temp_listOfCompanion ;*/
-

@@ -55,3 +55,5 @@ Registered Attendees:
 ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
 Registered Attendees:
 ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
+Registered Attendees:
+ID    Name                 Age   Address  Activity Zone                       Num of Companions    Activity Fee    Balance        
